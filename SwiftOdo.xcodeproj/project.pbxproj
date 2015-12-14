@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A5406CE1BE40CD200BE954D /* CoreLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */; };
 		2A61E2D11BE3DBEC00EA4507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */; };
 		2A61E2D31BE3DBEC00EA4507 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2D21BE3DBEC00EA4507 /* ViewController.swift */; };
 		2A61E2D61BE3DBEC00EA4507 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A61E2D41BE3DBEC00EA4507 /* Main.storyboard */; };
@@ -14,6 +15,9 @@
 		2A61E2DB1BE3DBEC00EA4507 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A61E2D91BE3DBEC00EA4507 /* LaunchScreen.storyboard */; };
 		2A61E2E61BE3DBED00EA4507 /* SwiftOdoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2E51BE3DBED00EA4507 /* SwiftOdoTests.swift */; };
 		2A61E2F11BE3DBED00EA4507 /* SwiftOdoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2F01BE3DBED00EA4507 /* SwiftOdoUITests.swift */; };
+		2AA496831BF21B7600310159 /* ModalOutTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA496821BF21B7600310159 /* ModalOutTimeViewController.swift */; };
+		2AA496851BF244E300310159 /* SetTimeSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA496841BF244E300310159 /* SetTimeSegue.swift */; };
+		2AA496871BF2450B00310159 /* SetTimeSegueUnwind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA496861BF2450B00310159 /* SetTimeSegueUnwind.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreLocationController.swift; sourceTree = "<group>"; };
 		2A61E2CD1BE3DBEC00EA4507 /* SwiftOdo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftOdo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2A61E2D21BE3DBEC00EA4507 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +52,9 @@
 		2A61E2EC1BE3DBED00EA4507 /* SwiftOdoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftOdoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A61E2F01BE3DBED00EA4507 /* SwiftOdoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftOdoUITests.swift; sourceTree = "<group>"; };
 		2A61E2F21BE3DBED00EA4507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2AA496821BF21B7600310159 /* ModalOutTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalOutTimeViewController.swift; sourceTree = "<group>"; };
+		2AA496841BF244E300310159 /* SetTimeSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetTimeSegue.swift; sourceTree = "<group>"; };
+		2AA496861BF2450B00310159 /* SetTimeSegueUnwind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetTimeSegueUnwind.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,11 +106,15 @@
 			isa = PBXGroup;
 			children = (
 				2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */,
+				2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */,
 				2A61E2D21BE3DBEC00EA4507 /* ViewController.swift */,
 				2A61E2D41BE3DBEC00EA4507 /* Main.storyboard */,
 				2A61E2D71BE3DBEC00EA4507 /* Assets.xcassets */,
 				2A61E2D91BE3DBEC00EA4507 /* LaunchScreen.storyboard */,
 				2A61E2DC1BE3DBEC00EA4507 /* Info.plist */,
+				2AA496821BF21B7600310159 /* ModalOutTimeViewController.swift */,
+				2AA496841BF244E300310159 /* SetTimeSegue.swift */,
+				2AA496861BF2450B00310159 /* SetTimeSegueUnwind.swift */,
 			);
 			path = SwiftOdo;
 			sourceTree = "<group>";
@@ -193,6 +205,12 @@
 				TargetAttributes = {
 					2A61E2CC1BE3DBEC00EA4507 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 4G4CBR5P5C;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					2A61E2E01BE3DBED00EA4507 = {
 						CreatedOnToolsVersion = 7.1;
@@ -256,8 +274,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AA496831BF21B7600310159 /* ModalOutTimeViewController.swift in Sources */,
+				2A5406CE1BE40CD200BE954D /* CoreLocationController.swift in Sources */,
 				2A61E2D31BE3DBEC00EA4507 /* ViewController.swift in Sources */,
 				2A61E2D11BE3DBEC00EA4507 /* AppDelegate.swift in Sources */,
+				2AA496871BF2450B00310159 /* SetTimeSegueUnwind.swift in Sources */,
+				2AA496851BF244E300310159 /* SetTimeSegue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,10 +421,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = SwiftOdo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.westberg.clarence.SwiftOdo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -410,10 +436,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = SwiftOdo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.westberg.clarence.SwiftOdo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -484,6 +514,7 @@
 				2A61E2F71BE3DBED00EA4507 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2A61E2F81BE3DBED00EA4507 /* Build configuration list for PBXNativeTarget "SwiftOdoTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +523,7 @@
 				2A61E2FA1BE3DBED00EA4507 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2A61E2FB1BE3DBED00EA4507 /* Build configuration list for PBXNativeTarget "SwiftOdoUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +532,7 @@
 				2A61E2FD1BE3DBED00EA4507 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
