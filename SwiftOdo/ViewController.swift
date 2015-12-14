@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
     
     // MARK: Properties
@@ -21,12 +21,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var omStepper: UIStepper!
     @IBOutlet weak var imLbl: UILabel!
     @IBOutlet weak var splitLbl: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+
     
     @IBOutlet weak var averageSpeedLbl: UILabel!
     @IBOutlet weak var timeLbl: UILabel!
     
     var timer: NSTimer?
     var oldStepper = 0.0
+    var items: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +44,32 @@ class ViewController: UIViewController {
 
         timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
+        
+        self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // Table
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.items.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        cell.textLabel?.text = self.items[indexPath.row]
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("You selected cell #\(indexPath.row)!")
+
+    }
+    // End Table
     
     func updateTimeLabel() {
         let formatter = NSDateFormatter()
@@ -59,6 +82,8 @@ class ViewController: UIViewController {
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
         self.splitLbl.text = (String(format: "%.2f", m as! Float64))
+        items.append (String(format: "%.2f", m as! Float64))
+        self.tableView.reloadData()
     }
     
     // MARK Actions
