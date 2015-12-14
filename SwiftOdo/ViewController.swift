@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var horrizontalAccuracy: UILabel!
     @IBOutlet weak var omStepper: UIStepper!
     @IBOutlet weak var imLbl: UILabel!
+    @IBOutlet weak var splitLbl: UILabel!
     
     @IBOutlet weak var averageSpeedLbl: UILabel!
     @IBOutlet weak var timeLbl: UILabel!
@@ -34,8 +35,10 @@ class ViewController: UIViewController {
         omStepper.minimumValue = -999.99
 
         self.factorLabel.text = "1.0000"
-
+        self.splitLbl.text = "0.00"
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "split:", name: "Split", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
+
         timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
     }
@@ -51,8 +54,21 @@ class ViewController: UIViewController {
         timeLbl.text = formatter.stringFromDate(NSDate())
     }
 
+    func split(notification:NSNotification){
+        let userInfo = notification.userInfo
+        //print(userInfo!["miles"]!)
+        let m = userInfo!["miles"]!
+        self.splitLbl.text = (String(format: "%.2f", m as! Float64))
+    }
+    
     // MARK Actions
     
+    
+    @IBAction func splitBtn(sender: AnyObject) {
+        let userInfo = [
+            "action":"splitOM"]
+        NSNotificationCenter.defaultCenter().postNotificationName("SplitOM", object: nil, userInfo: userInfo)
+    }
     
     @IBAction func selectedCountersChanged(sender: AnyObject) {
 //        SelectedCountersChanged
@@ -296,9 +312,9 @@ class ViewController: UIViewController {
         print("Odometer UserInfo: \(userInfo)")
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
-        self.milesLbl.text = (String(format: "%.3f", m as! Float64))
+        self.milesLbl.text = (String(format: "%.2f", m as! Float64))
         let im = userInfo!["imMiles"]!
-        self.imLbl.text = (String(format: "%.3f", im as! Float64))
+        self.imLbl.text = (String(format: "%.2f", im as! Float64))
 
         horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
         if userInfo?["speed"] != nil {

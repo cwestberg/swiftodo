@@ -40,6 +40,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "minusOne:", name: "MinusOne", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "directionChanged:", name: "DirectionChanged", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedCountersChanged:", name: "SelectedCountersChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "splitOM:", name: "SplitOM", object: nil)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setMileage:", name: "SetMileage", object: nil)
 
@@ -150,6 +151,19 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.currentLocations = locations
         self.fromLocation = locations
     }
+    
+    func splitOM(notification:NSNotification) -> Void {
+        print("splitOM")
+        let userInfo = [
+            "miles": self.miles,
+            "imMiles":self.imMiles,
+            "speed":Int(self.fromLocation.last!.speed * 2.23694),
+            "latitude":self.fromLocation.last!.coordinate.latitude,
+            "longitude":self.fromLocation.last!.coordinate.longitude,
+            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy]
+        NSNotificationCenter.defaultCenter().postNotificationName("Split", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+    }
+
     
     func selectedCountersChanged(notification:NSNotification) -> Void {
         print("selectedCountersChanged")
@@ -314,6 +328,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         //let distanceInMiles:Float64 = ((km * 0.621371) * self.factor)
         //self.miles = distanceInMiles
         //userInfo!["miles"] = self.miles
+        userInfo!["km"] = self.meters
         userInfo!["miles"] = self.miles
         userInfo!["imMiles"] = self.imMiles
         userInfo!["horizontalAccuracy"] = 5  //Fake
@@ -325,6 +340,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
 //        print("makeLocationNotification.distanceInMiles: \(distanceInMiles)")
 //        self.miles = distanceInMiles
         let userInfo = [
+            "km":self.meters,
             "miles":self.miles,
             "imMiles":self.imMiles,
             "speed":Int(self.currentLocations.last!.speed * 2.23694),
