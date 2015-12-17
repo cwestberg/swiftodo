@@ -15,19 +15,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var factorLabel: UILabel!
     
     @IBOutlet weak var milesLbl: UILabel!
-    @IBOutlet weak var etLbl: UILabel!
-    @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var horrizontalAccuracy: UILabel!
     @IBOutlet weak var omStepper: UIStepper!
     @IBOutlet weak var imLbl: UILabel!
     @IBOutlet weak var splitLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
-
     
-    @IBOutlet weak var averageSpeedLbl: UILabel!
-    @IBOutlet weak var timeLbl: UILabel!
-    
-    var timer: NSTimer?
     var oldStepper = 0.0
     var items: [String] = []
     
@@ -38,13 +31,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         omStepper.minimumValue = -999.99
 
         self.factorLabel.text = "1.0000"
-        self.splitLbl.text = "0.00"
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "split:", name: "Split", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
 
-        timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self,
-            selector: "updateTimeLabel", userInfo: nil, repeats: true)
-        
         self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
     }
 
@@ -71,17 +60,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     // End Table
     
-    func updateTimeLabel() {
-        let formatter = NSDateFormatter()
-        formatter.timeStyle = .MediumStyle
-        timeLbl.text = formatter.stringFromDate(NSDate())
-    }
-
     func split(notification:NSNotification){
         let userInfo = notification.userInfo
-        //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
-        self.splitLbl.text = (String(format: "%.2f", m as! Float64))
         items.insert(String(format: "%.2f", m as! Float64), atIndex:0)
         self.tableView.reloadData()
     }
@@ -153,10 +134,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     }
     
-    @IBAction func zeroTimer(sender: AnyObject) {
-        let userInfo = ["action":"zeroIntervalTime"]
-        NSNotificationCenter.defaultCenter().postNotificationName("ZeroInterval", object: nil, userInfo: userInfo)
-    }
     
     @IBAction func zeroOdo(sender: AnyObject) {
         //print("reset Btn pushed")
@@ -200,14 +177,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             NSNotificationCenter.defaultCenter().postNotificationName("ResetBoth", object: nil, userInfo: userInfo)
         }
         alertController.addAction(zeroAction)
-//        
-//        let zeroIntervalAction = UIAlertAction(title: "Zero Interval Time", style: .Destructive) {(action) in
-//            let userInfo = [
-//                "action":"zeroIntervalTime"]
-//            NSNotificationCenter.defaultCenter().postNotificationName("ZeroInterval", object: nil, userInfo: userInfo)
-//        }
-//        alertController.addAction(zeroIntervalAction)
-
     
         
         let setFactorAction = UIAlertAction(title: "Set Factor", style: .Destructive) { (action) in
@@ -342,21 +311,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         self.imLbl.text = (String(format: "%.2f", im as! Float64))
 
         horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
-        if userInfo?["speed"] != nil {
-            speedLabel.text = String(userInfo!["speed"]!)
-        }
-        //print("locationAvailable user info: \(userInfo)")
-        //print("nil: \(userInfo?["averageSpeed"] == nil)")
-        if userInfo?["averageSpeed"] != nil {
-            let averageSpeed = userInfo?["averageSpeed"]
-            //print("average speed notified \(averageSpeed)")
-            averageSpeedLbl.text = (String(format: "%.1f", averageSpeed as! Float64))
-            let et = userInfo!["et"]!
-            let etString = stringFromTimeInterval(et as! Double)
-            print("etString \(etString)")
-            etLbl.text = etString as String
-//           etLbl.text = String(format: "%.2f",et as! Float64)
-        }
+
+        
     }
     
     func stringFromTimeInterval(interval:NSTimeInterval) -> NSString {

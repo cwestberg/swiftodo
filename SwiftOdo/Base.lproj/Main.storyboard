@@ -43,13 +43,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6y-f2-x1P">
-                                <rect key="frame" x="365" y="550" width="70" height="30"/>
-                                <state key="normal" title="0 Timer"/>
-                                <connections>
-                                    <action selector="zeroTimer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gME-Dt-ZeK"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eyC-n2-RJI">
                                 <rect key="frame" x="291" y="66" width="46" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
@@ -74,12 +67,6 @@
                                     <action selector="dialogActions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fyj-03-32G"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Speed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gq8-qs-nJe">
-                                <rect key="frame" x="424" y="375" width="90" height="49"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="48"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="k2c-8G-a6a">
                                 <rect key="frame" x="17" y="235" width="135" height="29"/>
                                 <segments>
@@ -107,18 +94,6 @@
                                     <action selector="omStepper:" destination="BYZ-38-t0r" eventType="valueChanged" id="wFe-aU-B04"/>
                                 </connections>
                             </stepper>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="timeLbl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jo-Rw-FFB">
-                                <rect key="frame" x="389" y="471" width="203" height="32"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="34"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Split OM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dta-wD-6Sa">
-                                <rect key="frame" x="330" y="353" width="178" height="52"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pw-wr-Jtt">
                                 <rect key="frame" x="353" y="20" width="178" height="32"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="31"/>
@@ -127,18 +102,6 @@
                                     <action selector="splitBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4XS-eb-CER"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="et" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T3w-3Y-nr7">
-                                <rect key="frame" x="389" y="501" width="203" height="41"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="48"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Average Speed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBp-mI-efn">
-                                <rect key="frame" x="408" y="424" width="123" height="39"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="48"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rdc-GG-geS">
                                 <rect key="frame" x="351" y="66" width="229" height="197"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -151,17 +114,12 @@
                         <color key="backgroundColor" red="0.96744637468058814" green="1" blue="0.92614324419076122" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
-                        <outlet property="averageSpeedLbl" destination="jBp-mI-efn" id="OQq-N9-AXu"/>
-                        <outlet property="etLbl" destination="T3w-3Y-nr7" id="QIz-TX-OYT"/>
                         <outlet property="factorLabel" destination="8wW-rc-Q3t" id="Ayc-wl-uv9"/>
                         <outlet property="horrizontalAccuracy" destination="KFk-xj-bmV" id="AzP-LF-B7J"/>
                         <outlet property="imLbl" destination="vFL-y1-KZb" id="rd1-Vl-kUV"/>
                         <outlet property="milesLbl" destination="WZB-Uc-r9Z" id="GCs-bS-7SQ"/>
                         <outlet property="omStepper" destination="B55-s1-oY5" id="7BU-l4-1aS"/>
-                        <outlet property="speedLabel" destination="gq8-qs-nJe" id="bdu-bF-rcI"/>
-                        <outlet property="splitLbl" destination="Dta-wD-6Sa" id="M9R-Ks-VFq"/>
                         <outlet property="tableView" destination="Rdc-GG-geS" id="qXz-lh-C0h"/>
-                        <outlet property="timeLbl" destination="4jo-Rw-FFB" id="mub-A8-R6V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
