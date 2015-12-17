@@ -60,6 +60,13 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     // End Table
     
+    @IBAction func milesKMChanged(sender: AnyObject) {
+        let userInfo = [
+            "action":"\(sender)"]
+        
+        NSNotificationCenter.defaultCenter().postNotificationName("MilesKMSelectionChanged", object: nil, userInfo: userInfo)
+    }
+    
     func split(notification:NSNotification){
         let userInfo = notification.userInfo
         let m = userInfo!["miles"]!

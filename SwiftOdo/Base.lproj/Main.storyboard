@@ -110,6 +110,16 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Li8-3K-sCV"/>
                                 </connections>
                             </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5qL-bN-cus">
+                                <rect key="frame" x="480" y="276" width="93" height="29"/>
+                                <segments>
+                                    <segment title="Miles"/>
+                                    <segment title="KM"/>
+                                </segments>
+                                <connections>
+                                    <action selector="milesKMChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Rcg-Pa-QNh"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="0.96744637468058814" green="1" blue="0.92614324419076122" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
