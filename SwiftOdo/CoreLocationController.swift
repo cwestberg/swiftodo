@@ -18,6 +18,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     var km = 0.00
     var meters = 0.00
     var imMeters = 0.00
+    var imKM = 0.00
     var factor = 1.0000
     var direction = "forward"
     var selectedCounters = "om"
@@ -124,7 +125,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 if self.imMeters < 0.0 {
                     self.imMeters = 0.0
                 }
-                //self.km += distance // Actually meters
+                self.km = (self.meters/1000) * self.factor
                 let distanceInMiles:Float64 = ((self.meters * 0.000621371) * self.factor)
                 self.miles = distanceInMiles
                 let imDdistanceInMiles:Float64 = ((self.imMeters * 0.000621371) * self.factor)
@@ -139,6 +140,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             let userInfo = [
                 "miles":self.miles,
                 "imMiles":self.imMiles,
+                "imKM":self.imKM,
+                "km":self.km,
                 "speed":Int(location.speed * 2.23694),
                 "latitude":location.coordinate.latitude,
                 "longitude":location.coordinate.longitude,
@@ -157,6 +160,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         let userInfo = [
             "miles": self.miles,
             "imMiles":self.imMiles,
+            "imKM":self.imKM,
+            "km":self.km,
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
@@ -185,12 +190,12 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.meters = 0.00
         self.km = 0.00
         self.miles = 0.000
-        self.startTime = NSDate()
     }
     
     func resetIM(notification:NSNotification) -> Void {
         self.imMeters = 0.00
         self.imMiles = 0.000
+        self.imKM = 0.0
     }
     
     func resetBoth(notification:NSNotification) -> Void {
@@ -198,12 +203,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.miles = 0.000
         self.imMeters = 0.00
         self.imMiles = 0.000
+        self.imKM = 0.0
+        self.km = 0.0
     }
     
-    func zeroIntervalTime(notification:NSNotification) -> Void {
-        print("zt")
-        self.startTime = NSDate()
-    }
     
     func factorChanged(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
@@ -214,7 +217,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.miles = distanceInMiles
         let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
         self.imMiles = distanceInMeters
-
+        self.km = (self.meters/1000) * self.factor
         self.makeLocationNotification()
     }
     
@@ -240,10 +243,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.miles = distanceInMiles
         let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
         self.imMiles = distanceInMeters
+        self.km = (self.meters/1000)
         
         let userInfo = [
             "miles":miles,
             "imMiles":self.imMiles,
+            "km":self.km,
+            "imKM": self.imKM,
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
@@ -285,6 +291,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         let userInfo = [
             "miles":miles,
             "imMiles":self.imMiles,
+            "km":self.km,
+            "imKM": self.imKM,
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
@@ -309,7 +317,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
 //
     }
     
-    // Delete this as steppers do job
+
     func setMileage(notification:NSNotification) -> Void {
         var userInfo = notification.userInfo
         print("setMileage notification: \(userInfo))")
@@ -343,6 +351,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "km":self.meters,
             "miles":self.miles,
             "imMiles":self.imMiles,
+            "imKM": self.imKM,
             "speed":Int(self.currentLocations.last!.speed * 2.23694),
             "latitude":self.currentLocations.last!.coordinate.latitude,
             "longitude":self.currentLocations.last!.coordinate.longitude,
