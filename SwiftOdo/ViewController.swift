@@ -232,7 +232,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             self.presentViewController(alert, animated: true, completion: nil)        }
         alertController.addAction(setFactorAction)
         
-        // Remove this
         let setMileageAction = UIAlertAction(title: "Set Mileage", style: .Destructive) { (action) in
             print("Set Mileage Btn pushed")
             //Create the AlertController
