@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZB-Uc-r9Z">
-                                <rect key="frame" x="20" y="41" width="247" height="89"/>
+                                <rect key="frame" x="20" y="41" width="247" height="76"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="78"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -37,14 +38,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="IM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vFL-y1-KZb">
-                                <rect key="frame" x="20" y="138" width="247" height="89"/>
+                                <rect key="frame" x="20" y="146" width="247" height="74"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="78"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eyC-n2-RJI">
-                                <rect key="frame" x="291" y="66" width="46" height="39"/>
+                                <rect key="frame" x="275" y="59" width="46" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <state key="normal" title="0"/>
                                 <connections>
@@ -52,23 +53,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TVR-pi-i2I">
-                                <rect key="frame" x="291" y="163" width="46" height="39"/>
+                                <rect key="frame" x="275" y="163" width="46" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <state key="normal" title="0"/>
                                 <connections>
                                     <action selector="zeroIM:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ixf-1g-fAQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQ4-cn-V6d">
-                                <rect key="frame" x="17" y="270" width="97" height="39"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <state key="normal" title="Actions"/>
-                                <connections>
-                                    <action selector="dialogActions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fyj-03-32G"/>
-                                </connections>
-                            </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="k2c-8G-a6a">
-                                <rect key="frame" x="17" y="235" width="135" height="29"/>
+                                <rect key="frame" x="20" y="235" width="135" height="29"/>
                                 <segments>
                                     <segment title="OM"/>
                                     <segment title="Both"/>
@@ -79,7 +72,7 @@
                                 </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1HP-Wy-kJX">
-                                <rect key="frame" x="156" y="276" width="121" height="29"/>
+                                <rect key="frame" x="146" y="276" width="121" height="29"/>
                                 <segments>
                                     <segment title="Forward"/>
                                     <segment title="Reverse"/>
@@ -89,21 +82,21 @@
                                 </connections>
                             </segmentedControl>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumValue="-99999" maximumValue="99999" translatesAutoresizingMaskIntoConstraints="NO" id="B55-s1-oY5">
-                                <rect key="frame" x="180" y="235" width="94" height="29"/>
+                                <rect key="frame" x="173" y="234" width="94" height="29"/>
                                 <connections>
                                     <action selector="omStepper:" destination="BYZ-38-t0r" eventType="valueChanged" id="wFe-aU-B04"/>
                                 </connections>
                             </stepper>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pw-wr-Jtt">
-                                <rect key="frame" x="353" y="20" width="178" height="32"/>
+                                <rect key="frame" x="335" y="14" width="227" height="32"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                 <state key="normal" title="Split"/>
                                 <connections>
                                     <action selector="splitBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4XS-eb-CER"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rdc-GG-geS">
-                                <rect key="frame" x="351" y="66" width="229" height="197"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rdc-GG-geS">
+                                <rect key="frame" x="329" y="54" width="251" height="215"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="KS8-kl-kfI"/>
@@ -111,7 +104,7 @@
                                 </connections>
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5qL-bN-cus">
-                                <rect key="frame" x="480" y="276" width="93" height="29"/>
+                                <rect key="frame" x="20" y="276" width="93" height="29"/>
                                 <segments>
                                     <segment title="Miles"/>
                                     <segment title="KM"/>
@@ -120,8 +113,20 @@
                                     <action selector="milesKMChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Rcg-Pa-QNh"/>
                                 </connections>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQ4-cn-V6d">
+                                <rect key="frame" x="329" y="270" width="97" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Actions"/>
+                                <connections>
+                                    <action selector="dialogActions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fyj-03-32G"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.96744637468058814" green="1" blue="0.92614324419076122" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Rdc-GG-geS" secondAttribute="trailing" id="4BH-bL-gPW"/>
+                            <constraint firstItem="Rdc-GG-geS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="309" id="EyR-9g-W6W"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="factorLabel" destination="8wW-rc-Q3t" id="Ayc-wl-uv9"/>

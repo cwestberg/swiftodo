@@ -58,6 +58,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print("You selected cell #\(indexPath.row)!")
 
     }
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            items.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
     // End Table
     
     @IBAction func milesKMChanged(sender: AnyObject) {
@@ -187,9 +193,16 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         alertController.addAction(cancelAction)
         
+        let clearTable = UIAlertAction(title: "Clear Splits", style: .Destructive) {(action) in
+            self.items.removeAll()
+            self.tableView.reloadData()
+        }
+        alertController.addAction(clearTable)
+
+        
         let zeroAction = UIAlertAction(title: "Reset Trip Meters", style: .Destructive) {(action) in
             let userInfo = [
-                "action":"resetBoth"]
+               "action":"resetBoth"]
             NSNotificationCenter.defaultCenter().postNotificationName("ResetBoth", object: nil, userInfo: userInfo)
         }
         alertController.addAction(zeroAction)
