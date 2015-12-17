@@ -82,7 +82,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
         self.splitLbl.text = (String(format: "%.2f", m as! Float64))
-        items.append (String(format: "%.2f", m as! Float64))
+        items.insert(String(format: "%.2f", m as! Float64), atIndex:0)
         self.tableView.reloadData()
     }
     
