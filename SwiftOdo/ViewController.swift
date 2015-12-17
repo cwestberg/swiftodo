@@ -13,7 +13,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     // MARK: Properties
     @IBOutlet weak var factorLabel: UILabel!
-    
     @IBOutlet weak var milesLbl: UILabel!
     @IBOutlet weak var horrizontalAccuracy: UILabel!
     @IBOutlet weak var omStepper: UIStepper!
@@ -21,6 +20,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var splitLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    var distanceType = "miles"
     var oldStepper = 0.0
     var items: [String] = []
     
@@ -61,9 +61,18 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     // End Table
     
     @IBAction func milesKMChanged(sender: AnyObject) {
-        let userInfo = [
-            "action":"\(sender)"]
         
+        switch sender.selectedSegmentIndex
+        {
+        case 0:
+            distanceType = "miles"
+        case 1:
+            distanceType = "km"
+        default:
+            break;
+        }
+        let userInfo = [
+            "action":"\(distanceType)"]
         NSNotificationCenter.defaultCenter().postNotificationName("MilesKMSelectionChanged", object: nil, userInfo: userInfo)
     }
     
@@ -316,10 +325,23 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         self.milesLbl.text = (String(format: "%.2f", m as! Float64))
         let im = userInfo!["imMiles"]!
         self.imLbl.text = (String(format: "%.2f", im as! Float64))
-
-        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
-
         
+        switch distanceType
+        {
+        case "miles":
+            let m = userInfo!["miles"]!
+            self.milesLbl.text = (String(format: "%.2f", m as! Float64))
+            let im = userInfo!["imMiles"]!
+            self.imLbl.text = (String(format: "%.2f", im as! Float64))
+        case "km":
+            let d = userInfo!["km"]!
+            self.milesLbl.text = (String(format: "%.2f", d as! Float64))
+            let imD = userInfo!["imKM"]!
+            self.imLbl.text = (String(format: "%.2f", imD as! Float64))
+        default:
+            break;
+        }
+        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
     
     func stringFromTimeInterval(interval:NSTimeInterval) -> NSString {
