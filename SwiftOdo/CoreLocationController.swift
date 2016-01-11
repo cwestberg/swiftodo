@@ -28,7 +28,6 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.miles = 0.0
         self.factor = 1.0
         super.init()
-
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestAlwaysAuthorization()
@@ -44,7 +43,6 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "splitOM:", name: "SplitOM", object: nil)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setMileage:", name: "SetMileage", object: nil)
-
     }
     
     
@@ -75,6 +73,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        return
         if self.fromLocation.count > 0 {
             var addDistance = true
             let location:CLLocation = locations.last!
@@ -157,7 +156,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func splitOM(notification:NSNotification) -> Void {
-        print("splitOM")
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         let userInfo = [
             "miles": self.miles,
             "imMiles":self.imMiles,
@@ -223,10 +225,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func plusOne(notification:NSNotification) -> Void {
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         
         let updateChoices = self.selectedCounters
-        print("plusOne \(updateChoices)")
-
+        
         switch updateChoices
         {
         case "both":
@@ -246,7 +251,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.imMiles = distanceInMeters
         self.km = (self.meters/1000)
         self.imKM = (self.imMeters/1000)
-        
+
         let userInfo = [
             "miles":miles,
             "imMiles":self.imMiles,
@@ -260,9 +265,11 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func minusOne(notification:NSNotification) -> Void {
-        
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         let updateChoices = self.selectedCounters
-        print("plusOne /(updateChoices)")
         
         switch updateChoices
         {
@@ -325,7 +332,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func makeLocationNotification() -> Void {
-
+        guard let _ = self.currentLocations.last
+            else {
+                return
+        }
         let userInfo = [
             "km":self.meters,
             "miles":self.miles,

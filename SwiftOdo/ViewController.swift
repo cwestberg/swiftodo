@@ -353,6 +353,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         default:
             break;
         }
+        
         horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
     
