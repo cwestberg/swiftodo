@@ -132,6 +132,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="countersControl" destination="k2c-8G-a6a" id="lgZ-66-qsh"/>
+                        <outlet property="directionControl" destination="1HP-Wy-kJX" id="GbG-Ai-U3V"/>
                         <outlet property="factorLabel" destination="8wW-rc-Q3t" id="Ayc-wl-uv9"/>
                         <outlet property="horrizontalAccuracy" destination="KFk-xj-bmV" id="AzP-LF-B7J"/>
                         <outlet property="imLbl" destination="vFL-y1-KZb" id="rd1-Vl-kUV"/>

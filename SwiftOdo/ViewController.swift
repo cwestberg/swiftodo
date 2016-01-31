@@ -21,6 +21,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var imLbl: UILabel!
     @IBOutlet weak var splitLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var directionControl: UISegmentedControl!
+    @IBOutlet weak var countersControl: UISegmentedControl!
     
     var distanceType = "miles"
     var oldStepper = 0.0
@@ -79,6 +81,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let userInfo = [
                     "action":"\(direction)"]
                 NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+                self.directionControl.selectedSegmentIndex = 1
             }
         }
         
@@ -88,8 +91,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let direction = "forward"
                 let userInfo = [
                     "action":"\(direction)"]
-                
                 NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+                self.directionControl.selectedSegmentIndex = 0
             }
         }
         
@@ -115,22 +118,45 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonY")
+                let counters = "both"
                 let userInfo = [
-                    "action":"plusOne"]
-                NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+                    "action":"\(counters)"]
+                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
+                self.countersControl.selectedSegmentIndex = 1
             }
         }
 
         
         controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
+                var counters = ""
                 print("buttonX")
+                switch self.countersControl.selectedSegmentIndex {
+                case 0:
+                    counters = "im"
+                    self.countersControl.selectedSegmentIndex = 2
+                case 1:
+                    counters = "om"
+                    self.countersControl.selectedSegmentIndex = 0
+                case 2:
+                    counters = "om"
+                    self.countersControl.selectedSegmentIndex = 0
+                default:
+                    break;
+                }
+                
                 let userInfo = [
-                    "action":"resetIM"]
-                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+                    "action":"\(counters)"]
+                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
             }
         }
-        
+        controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("rightShoulder")
+                self.items.insert(self.milesLbl.text!, atIndex:0)
+                self.tableView.reloadData()
+            }
+        }
     }
     
     // Table
