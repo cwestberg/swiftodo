@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import GameController
+
 
 class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
@@ -33,6 +35,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         self.factorLabel.text = "1.0000"
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "split:", name: "Split", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "controllerDidConnect:", name: "GCControllerDidConnectNotification", object: nil)
 
         self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
     }
@@ -40,6 +45,92 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func controllerDidConnect(notification: NSNotification) {
+        
+        let controller = notification.object as! GCController
+        print("controller is \(controller)")
+        print("game on ")
+        print("\(controller.gamepad!.buttonA.pressed)")
+
+        controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("dpad.up")
+                let userInfo = [
+                    "action":"plusOne"]
+                NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+            }
+        }
+        
+        controller.gamepad?.dpad.down.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("dpad.up")
+                let userInfo = [
+                    "action":"minusOne"]
+                NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+            }
+        }
+        
+        controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("dpad.left")
+                let direction = "reverse"
+                let userInfo = [
+                    "action":"\(direction)"]
+                NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+            }
+        }
+        
+        controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("dpad.right")
+                let direction = "forward"
+                let userInfo = [
+                    "action":"\(direction)"]
+                
+                NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+            }
+        }
+        
+        controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonA")
+                let userInfo = [
+                    "action":"reset"]
+                NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+            }
+        }
+        //        controller.gamepad?.rightShoulder
+        controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonB")
+                
+                let userInfo = [
+                    "action":"resetIM"]
+                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+            }
+        }
+
+        controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonY")
+                let userInfo = [
+                    "action":"plusOne"]
+                NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+            }
+        }
+
+        
+        controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonX")
+                let userInfo = [
+                    "action":"resetIM"]
+                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+            }
+        }
+        
     }
     
     // Table
@@ -137,10 +228,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     }
     @IBAction func omStepper(sender: UIStepper) {
-        print(sender)
-        print(sender.value)
-        print(oldStepper)
-        print(sender.value < oldStepper)
+//        print(sender)
+//        print(sender.value)
+//        print(oldStepper)
+//        print(sender.value < oldStepper)
         if sender.value < oldStepper{
             let userInfo = [
                 "action":"minusOne"]
@@ -246,7 +337,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         alertController.addAction(setFactorAction)
         
         let setMileageAction = UIAlertAction(title: "Set Mileage", style: .Destructive) { (action) in
-            print("Set Mileage Btn pushed")
+//            print("Set Mileage Btn pushed")
             //Create the AlertController
             let alert: UIAlertController = UIAlertController(title: "Set Mileage", message: "Swiftly Now! Enter Mileage", preferredStyle: .Alert)
             
@@ -262,7 +353,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 
                 textField.keyboardType = UIKeyboardType.NumberPad
                 let newMileage = (textField.text! as NSString).floatValue
-                print("save: \(newMileage)")
+//                print("save: \(newMileage)")
                 let userInfo = [
                     "newMileage":newMileage]
                 NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
@@ -331,7 +422,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
-        print("Odometer UserInfo: \(userInfo)")
+//        print("Odometer UserInfo: \(userInfo)")
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
         self.milesLbl.text = (String(format: "%.2f", m as! Float64))
