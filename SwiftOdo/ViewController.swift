@@ -113,6 +113,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 
                 let userInfo = [
                     "action":"resetIM"]
+                let zim = String(format: "%.2f", self.splitOM)
+                self.items.insert("ZIM \(zim)", atIndex:0)
+                self.tableView.reloadData()
                 NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
             }
         }
@@ -289,7 +292,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             "action":"resetIM"]
         let zim = String(format: "%.2f", self.splitOM)
         items.insert("ZIM \(zim)", atIndex:0)
-//        items.insert(String(format: "%.2f", self.splitOM), atIndex:0)
         self.tableView.reloadData()
         NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
     }
