@@ -27,6 +27,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var distanceType = "miles"
     var oldStepper = 0.0
     var items: [String] = []
+    var splitOM = 0.00
+    var splitIM = 0.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +59,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print("\(controller.gamepad!.buttonA.pressed)")
 
         controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
+            if pressed  && value > 0.2 {
                 print("dpad.up")
                 let userInfo = [
                     "action":"plusOne"]
@@ -66,7 +68,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         
         controller.gamepad?.dpad.down.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
+            if pressed && value > 0.2  {
                 print("dpad.up")
                 let userInfo = [
                     "action":"minusOne"]
@@ -75,7 +77,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         
         controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
+            if pressed  && value > 0.2 {
                 print("dpad.left")
                 let direction = "reverse"
                 let userInfo = [
@@ -86,7 +88,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         
         controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
+            if pressed && value > 0.2  {
                 print("dpad.right")
                 let direction = "forward"
                 let userInfo = [
@@ -285,6 +287,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         //print("zeroIM Btn pushed")
         let userInfo = [
             "action":"resetIM"]
+        let zim = String(format: "%.2f", self.splitOM)
+        items.insert("ZIM \(zim)", atIndex:0)
+//        items.insert(String(format: "%.2f", self.splitOM), atIndex:0)
+        self.tableView.reloadData()
         NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
     }
    
@@ -449,10 +455,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
 //        print("Odometer UserInfo: \(userInfo)")
-        //print(userInfo!["miles"]!)
+//        print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
+        self.splitOM = m as! Double
         self.milesLbl.text = (String(format: "%.2f", m as! Float64))
         let im = userInfo!["imMiles"]!
+        self.splitIM = im as! Double
         self.imLbl.text = (String(format: "%.2f", im as! Float64))
         
         switch distanceType

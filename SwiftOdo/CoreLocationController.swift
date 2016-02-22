@@ -245,9 +245,9 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             break;
         }
 
-        let distanceInMiles:Float64 = ((self.meters * 0.000621371))
+        let distanceInMiles:Float64 = ((self.meters * 0.000621371)) * self.factor
         self.miles = distanceInMiles
-        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
+        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371)) * self.factor
         self.imMiles = distanceInMeters
         self.km = (self.meters/1000)
         self.imKM = (self.imMeters/1000)
@@ -292,9 +292,9 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         }
 
     
-        let distanceInMiles:Float64 = ((self.meters * 0.000621371))
+        let distanceInMiles:Float64 = ((self.meters * 0.000621371)) * self.factor
         self.miles = distanceInMiles
-        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
+        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371)) * self.factor
         self.imMiles = distanceInMeters
         self.imKM = (self.imMeters/1000)
 
@@ -317,9 +317,9 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         let newMileage = userInfo!["newMileage"] as! Float64
         let newMilesAsKM = newMileage * 1.60934
         self.meters = newMilesAsKM * 1000
-        let distanceInMiles:Float64 = ((self.meters * 0.000621371))
+        let distanceInMiles:Float64 = ((self.meters * 0.000621371)) * self.factor
         self.miles = distanceInMiles
-        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
+        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371)) * self.factor
         self.imMiles = distanceInMeters
         self.imKM = (self.imMeters/1000)
 
