@@ -24,18 +24,27 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var directionControl: UISegmentedControl!
     @IBOutlet weak var countersControl: UISegmentedControl!
     
+    @IBOutlet weak var factorStepper: UIStepper!
     var distanceType = "miles"
     var oldStepper = 0.0
     var items: [String] = []
     var splitOM = 0.00
     var splitIM = 0.00
+    var factor = 1.0000
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         omStepper.maximumValue = 999.99
         omStepper.minimumValue = -999.99
-
+        
+        milesLbl.layer.borderColor = UIColor.blueColor().CGColor
+        milesLbl.layer.borderWidth = 1
+        milesLbl.layer.cornerRadius = 10
+        imLbl.layer.borderColor = UIColor.blueColor().CGColor
+        imLbl.layer.borderWidth = 1
+        imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "split:", name: "Split", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
@@ -123,11 +132,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonY")
-                let counters = "both"
                 let userInfo = [
-                    "action":"\(counters)"]
-                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
-                self.countersControl.selectedSegmentIndex = 1
+                    "action":"resetBoth"]
+                NSNotificationCenter.defaultCenter().postNotificationName("ResetBoth", object: nil, userInfo: userInfo)
+//                let counters = "both"
+//                let userInfo = [
+//                    "action":"\(counters)"]
+//                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
+//                self.countersControl.selectedSegmentIndex = 1
             }
         }
 
@@ -135,20 +147,28 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 var counters = ""
-                print("buttonX")
+                print("buttonX \(self.countersControl.selectedSegmentIndex)")
+                var index = self.countersControl.selectedSegmentIndex
+                index = index + 1
+                if index == 3 {
+                    self.countersControl.selectedSegmentIndex = 0
+                }
+                print("buttonX \(self.countersControl.selectedSegmentIndex)")
+                self.countersControl.selectedSegmentIndex = index
                 switch self.countersControl.selectedSegmentIndex {
                 case 0:
-                    counters = "im"
-                    self.countersControl.selectedSegmentIndex = 2
+                    counters = "om"
+//                    self.countersControl.selectedSegmentIndex = 2
                 case 1:
-                    counters = "om"
-                    self.countersControl.selectedSegmentIndex = 0
+                    counters = "both"
+//                    self.countersControl.selectedSegmentIndex = 1
                 case 2:
-                    counters = "om"
-                    self.countersControl.selectedSegmentIndex = 0
+                    counters = "im"
+//                    self.countersControl.selectedSegmentIndex = 0
                 default:
                     break;
                 }
+
                 
                 let userInfo = [
                     "action":"\(counters)"]
@@ -188,6 +208,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     // End Table
     
+    @IBAction func factorStepper(sender: UIStepper) {
+        self.factor = sender.value
+        self.factorLabel.text = String(format: "%.4f",self.factor)
+        let userInfo = [
+            "factor":factor]
+        NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
+    }
+    
     @IBAction func milesKMChanged(sender: AnyObject) {
         
         switch sender.selectedSegmentIndex
@@ -206,6 +234,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     func split(notification:NSNotification){
         let userInfo = notification.userInfo
+//        print("split nofification \(userInfo)")
         let m = userInfo!["miles"]!
         items.insert(String(format: "%.2f", m as! Float64), atIndex:0)
         self.tableView.reloadData()
@@ -458,25 +487,25 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = notification.userInfo
 //        print("Odometer UserInfo: \(userInfo)")
 //        print(userInfo!["miles"]!)
-        let m = userInfo!["miles"]!
-        self.splitOM = m as! Double
-        self.milesLbl.text = (String(format: "%.2f", m as! Float64))
-        let im = userInfo!["imMiles"]!
-        self.splitIM = im as! Double
-        self.imLbl.text = (String(format: "%.2f", im as! Float64))
+//        let m = userInfo!["miles"]!
+//        self.splitOM = m as! Double
+//        self.milesLbl.text = (String(format: "%.2f", m as! Float64))
+//        let im = userInfo!["imMiles"]!
+//        self.splitIM = im as! Double
+//        self.imLbl.text = (String(format: "%.2f", im as! Float64))
         
         switch distanceType
         {
         case "miles":
             let m = userInfo!["miles"]!
-            self.milesLbl.text = (String(format: "%.2f", m as! Float64))
+            self.milesLbl.text = (String(format: "%06.2f", m as! Float64))
             let im = userInfo!["imMiles"]!
-            self.imLbl.text = (String(format: "%.2f", im as! Float64))
+            self.imLbl.text = (String(format: "%06.2f", im as! Float64))
         case "km":
             let d = userInfo!["km"]!
-            self.milesLbl.text = (String(format: "%.2f", d as! Float64))
+            self.milesLbl.text = (String(format: "%06.2f", d as! Float64))
             let imD = userInfo!["imKM"]!
-            self.imLbl.text = (String(format: "%.2f", imD as! Float64))
+            self.imLbl.text = (String(format: "%06.2f", imD as! Float64))
         default:
             break;
         }
