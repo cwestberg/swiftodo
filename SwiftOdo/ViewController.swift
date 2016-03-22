@@ -208,6 +208,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     // End Table
     
+    @IBAction func shareBtn(sender: UIButton) {
+        self.share()
+    }
     @IBAction func factorStepper(sender: UIStepper) {
         self.factor = sender.value
         self.factorLabel.text = String(format: "%.4f",self.factor)
@@ -433,12 +436,47 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             self.presentViewController(alert, animated: true, completion: nil)        }
         alertController.addAction(setMileageAction)
 
+//        self.presentViewController(alertController, animated: true) {
+//            // ...
+//        }
+        
+        let addNoteAction = UIAlertAction(title: "Add Note", style: .Destructive) { (action) in
+            //Create the AlertController
+            let alert: UIAlertController = UIAlertController(title: "Add Note", message: "Swiftly Now! Add Note", preferredStyle: .Alert)
+            
+            //Create and add the Cancel action
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+                //Do some stuff
+            }
+            alert.addAction(cancelAction)
+            
+            let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+                
+                let textField = alert.textFields![0] as UITextField
+//                print(textField.text!)
+                self.items.insert("N: \(textField.text!) at \(self.milesLbl.text!)", atIndex:0)
+                self.tableView.reloadData()
+                
+            })
+            alert.addAction(saveAction)
+            
+            //Add a text field
+            alert.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
+                textField.text = ""
+            }
+            
+            //Present the AlertController
+            self.presentViewController(alert, animated: true, completion: nil)        }
+        alertController.addAction(addNoteAction)
+        
         self.presentViewController(alertController, animated: true) {
             // ...
         }
 
     }
     
+
+
     @IBAction func resetBtn(sender: AnyObject) {
         //print("reset Btn pushed")
         let userInfo = [
@@ -512,6 +550,22 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
+    
+    func share() {
+        
+        print("\(self.items)")
+        var firstActivityItem = [String]()
+//        _ = self.items
+        for item in items {
+            firstActivityItem.append(item)
+        }
+        
+        //        let firstActivityItem = "\(self.splits)"
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: firstActivityItem, applicationActivities: nil)
+        presentViewController(activityViewController, animated:true, completion: nil)
+        
+    }
+
     
     func stringFromTimeInterval(interval:NSTimeInterval) -> NSString {
         
