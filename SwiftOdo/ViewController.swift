@@ -28,9 +28,11 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var distanceType = "miles"
     var oldStepper = 0.0
     var items: [String] = []
+    var actions: [String] = []
     var splitOM = 0.00
     var splitIM = 0.00
     var factor = 1.0000
+    var distance = 0.0
 
     
     override func viewDidLoad() {
@@ -46,14 +48,18 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         imLbl.layer.borderWidth = 1
         imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "split:", name: "Split", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.split(_:)), name: "Split", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: "LOCATION_AVAILABLE", object: nil)
         
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "controllerDidConnect:", name: "GCControllerDidConnectNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
 
-        self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
+        self.tableView.estimatedRowHeight = 100.0
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+//        self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
+
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -193,6 +199,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         cell.textLabel?.text = self.items[indexPath.row]
+        cell.detailTextLabel!.text = self.actions[indexPath.row]
         return cell
     }
     
@@ -240,6 +247,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //        print("split nofification \(userInfo)")
         let m = userInfo!["miles"]!
         items.insert(String(format: "%.2f", m as! Float64), atIndex:0)
+        actions.insert("Split", atIndex:0)
         self.tableView.reloadData()
     }
     
@@ -323,7 +331,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = [
             "action":"resetIM"]
         let zim = String(format: "%.2f", self.splitOM)
-        items.insert("ZIM \(zim)", atIndex:0)
+        items.insert("\(zim)", atIndex:0)
+        actions.insert("Zero IM", atIndex:0)
         self.tableView.reloadData()
         NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
     }
@@ -343,6 +352,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func dialogActions(sender: AnyObject) {
+        let splitDistance = self.distance
+
         let alertController = UIAlertController(title: "Actions", message: "Select Action to perform", preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
@@ -454,7 +465,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 
                 let textField = alert.textFields![0] as UITextField
 //                print(textField.text!)
-                self.items.insert("N: \(textField.text!) at \(self.milesLbl.text!)", atIndex:0)
+                self.items.insert("\(String(format: "%.2f", splitDistance))", atIndex:0)
+                self.actions.insert("\(textField.text!)", atIndex:0)
+
                 self.tableView.reloadData()
                 
             })
@@ -536,11 +549,13 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         {
         case "miles":
             let m = userInfo!["miles"]!
+            self.distance = m as! Float64
             self.milesLbl.text = (String(format: "%06.2f", m as! Float64))
             let im = userInfo!["imMiles"]!
             self.imLbl.text = (String(format: "%06.2f", im as! Float64))
         case "km":
             let d = userInfo!["km"]!
+            self.distance = d as! Float64
             self.milesLbl.text = (String(format: "%06.2f", d as! Float64))
             let imD = userInfo!["imKM"]!
             self.imLbl.text = (String(format: "%06.2f", imD as! Float64))

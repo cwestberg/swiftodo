@@ -31,18 +31,18 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestAlwaysAuthorization()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reset:", name: "Reset", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetIM:", name: "ResetIM", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetBoth:", name: "ResetBoth", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "zeroIntervalTime:", name: "ZeroInterval", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "plusOne:", name: "PlusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "minusOne:", name: "MinusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "directionChanged:", name: "DirectionChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedCountersChanged:", name: "SelectedCountersChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "splitOM:", name: "SplitOM", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.reset(_:)), name: "Reset", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetIM(_:)), name: "ResetIM", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetBoth(_:)), name: "ResetBoth", object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("zeroIntervalTime:"), name: "ZeroInterval", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.factorChanged(_:)), name: "FACTOR_CHANGED", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.plusOne(_:)), name: "PlusOne", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.minusOne(_:)), name: "MinusOne", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.directionChanged(_:)), name: "DirectionChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.selectedCountersChanged(_:)), name: "SelectedCountersChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.splitOM(_:)), name: "SplitOM", object: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setMileage:", name: "SetMileage", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.setMileage(_:)), name: "SetMileage", object: nil)
     }
     
     
