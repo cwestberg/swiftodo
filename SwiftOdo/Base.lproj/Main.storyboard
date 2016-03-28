@@ -73,7 +73,7 @@
                                                     <rect key="frame" x="15" y="-1" width="34" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="heightClass=compact">
                                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -83,7 +83,7 @@
                                                     <rect key="frame" x="15" y="20" width="44" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="heightClass=compact">
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -245,6 +245,7 @@
                             <constraint firstItem="p5b-W5-j1j" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-6" id="JHP-fT-afY">
                                 <variation key="heightClass=regular-widthClass=regular" constant="352"/>
                             </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="p5b-W5-j1j" secondAttribute="trailing" constant="105" id="K2j-WX-XMt"/>
                             <constraint firstAttribute="leadingMargin" secondItem="vFL-y1-KZb" secondAttribute="leading" id="NSy-J1-bS8"/>
                             <constraint firstAttribute="leadingMargin" secondItem="vFL-y1-KZb" secondAttribute="leading" id="OZp-87-8Bp"/>
                             <constraint firstItem="KFk-xj-bmV" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="7" id="Rl0-hP-UaX">
@@ -295,9 +296,6 @@
                             </constraint>
                             <constraint firstItem="TVR-pi-i2I" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="248" id="blB-Hz-TpC">
                                 <variation key="heightClass=compact" constant="250"/>
-                            </constraint>
-                            <constraint firstItem="p5b-W5-j1j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="203" id="cWb-rh-DWH">
-                                <variation key="heightClass=compact" constant="469"/>
                             </constraint>
                             <constraint firstItem="1HP-Wy-kJX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="302" id="cZA-Eq-yCz">
                                 <variation key="heightClass=compact" constant="286"/>
@@ -350,6 +348,7 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Rdc-GG-geS" secondAttribute="bottom" constant="99" id="pwv-7k-g9W">
                                 <variation key="heightClass=compact" constant="20"/>
                             </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="p5b-W5-j1j" secondAttribute="trailing" id="qXw-Xf-nQe"/>
                             <constraint firstItem="eyC-n2-RJI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="255" id="qeF-I6-sXM">
                                 <variation key="heightClass=compact" constant="250"/>
                             </constraint>
@@ -436,6 +435,9 @@
                                 <exclude reference="E64-RP-7SZ"/>
                                 <exclude reference="eJG-Bw-aCc"/>
                                 <exclude reference="f5v-jE-OaQ"/>
+                                <exclude reference="T6h-sg-gZs"/>
+                                <exclude reference="UHV-yk-ovC"/>
+                                <exclude reference="XTn-Di-thE"/>
                                 <exclude reference="0zC-Tj-88q"/>
                                 <exclude reference="2sv-Dm-Zym"/>
                                 <exclude reference="9ab-MT-9qp"/>
@@ -445,12 +447,11 @@
                                 <exclude reference="n9t-Kf-sNf"/>
                                 <exclude reference="o4V-0m-lhG"/>
                                 <exclude reference="pZn-kb-vIa"/>
-                                <exclude reference="T6h-sg-gZs"/>
-                                <exclude reference="UHV-yk-ovC"/>
-                                <exclude reference="XTn-Di-thE"/>
                                 <exclude reference="9ea-rs-ejC"/>
                                 <exclude reference="JHP-fT-afY"/>
+                                <exclude reference="K2j-WX-XMt"/>
                                 <exclude reference="kEf-co-g4h"/>
+                                <exclude reference="qXw-Xf-nQe"/>
                                 <exclude reference="WtY-SB-hdC"/>
                                 <exclude reference="ck4-UD-Lnn"/>
                                 <exclude reference="pwv-7k-g9W"/>
@@ -473,11 +474,12 @@
                                 <include reference="0sX-df-EwA"/>
                                 <include reference="DGY-tW-rOf"/>
                                 <include reference="E64-RP-7SZ"/>
+                                <include reference="UHV-yk-ovC"/>
                                 <include reference="0zC-Tj-88q"/>
                                 <include reference="9ab-MT-9qp"/>
                                 <include reference="YNy-tL-k5l"/>
-                                <include reference="UHV-yk-ovC"/>
                                 <include reference="9ea-rs-ejC"/>
+                                <include reference="qXw-Xf-nQe"/>
                                 <include reference="pwv-7k-g9W"/>
                             </mask>
                         </variation>
@@ -494,6 +496,7 @@
                                 <include reference="2sv-Dm-Zym"/>
                                 <include reference="n9t-Kf-sNf"/>
                                 <include reference="o4V-0m-lhG"/>
+                                <include reference="K2j-WX-XMt"/>
                                 <include reference="ck4-UD-Lnn"/>
                             </mask>
                         </variation>
@@ -526,11 +529,11 @@
                                 <include reference="XeS-me-Jzd"/>
                                 <include reference="eJG-Bw-aCc"/>
                                 <include reference="f5v-jE-OaQ"/>
+                                <include reference="T6h-sg-gZs"/>
+                                <include reference="XTn-Di-thE"/>
                                 <include reference="9r4-Cp-1Us"/>
                                 <include reference="g5b-zZ-MIx"/>
                                 <include reference="pZn-kb-vIa"/>
-                                <include reference="T6h-sg-gZs"/>
-                                <include reference="XTn-Di-thE"/>
                                 <include reference="JHP-fT-afY"/>
                                 <include reference="kEf-co-g4h"/>
                                 <include reference="WtY-SB-hdC"/>
