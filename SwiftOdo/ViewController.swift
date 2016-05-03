@@ -8,7 +8,7 @@
 
 import UIKit
 import GameController
-
+import CoreLocation
 
 class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
@@ -33,7 +33,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var splitIM = 0.00
     var factor = 1.0000
     var distance = 0.0
-
+    let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,17 +50,77 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         imLbl.layer.borderWidth = 1
         imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
+        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
+    
+        
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.split(_:)), name: "Split", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: "LOCATION_AVAILABLE", object: nil)
         
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
 
+        //        XGPS API
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.deviceDataUpdated(_:)), name: "DeviceDataUpdated", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgp160Connected(_:)), name: "XGPS160Connected", object: nil)
+        
+
+        
+        
         self.tableView.estimatedRowHeight = 100.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
 //        self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
 
     }
+
+    func xgp160Connected(notification:NSNotification) {
+        print("xgp160Connected")
+    }
+    func deviceDataUpdated(notification:NSNotification) {
+//        print("deviceDataUpdated")
+    }
+    
+    func updateUIWithNewPositionData(notification:NSNotification) {
+//        print("updateUIWithNewPositionData")
+//        print(delegate!.xgps160!.utc)
+//        print(delegate!.xgps160!.lat)
+//        print(delegate!.xgps160!.lon)
+        let latitude: CLLocationDegrees = Double(delegate!.xgps160!.lat)
+        let longitude: CLLocationDegrees = Double(delegate!.xgps160!.lon)
+        
+        let location: CLLocation = CLLocation(latitude: latitude,
+                                              longitude: longitude)
+
+//            print(delegate?.xgps160!.hdop)
+        guard let hdop = delegate?.xgps160!.hdop
+        
+            else {
+                
+                return
+        }
+//        let hdop = delegate?.xgps160!.hdop
+//        print(hdop)
+        horrizontalAccuracy.text = String(hdop)
+        if Double((hdop)) > 1.0 {
+            print("hdop > 1 \(hdop)")
+        }
+//        print(delegate!.xgps160!.waasInUse)
+        
+        if ((delegate?.xgps160!.speedAndCourseIsValid) != nil) && delegate?.xgps160!.fixType == 3
+        {
+            if Double(hdop) > 2.0 {return}
+            if Double(delegate!.xgps160!.speedKph) < 1.5 {return}
+
+            delegate?.coreLocationController?.updateLocation([location],xgps: true)
+
+        }
+        
+    }
+    
+    
     
     override func viewWillAppear(animated: Bool) {
         
@@ -190,6 +252,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("rightShoulder")
+                self.actions.insert("Split", atIndex: 0)
                 self.items.insert(self.milesLbl.text!, atIndex:0)
                 self.tableView.reloadData()
             }
@@ -204,6 +267,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+//        print(indexPath.row)
+//        print(self.actions.count)
+//        print(self.actions)
         cell.textLabel?.text = self.items[indexPath.row]
         cell.detailTextLabel!.text = self.actions[indexPath.row]
         return cell
@@ -230,6 +296,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = [
             "factor":factor]
         NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
+        self.items.insert(String(format: "%.4f", factor), atIndex:0)
+        self.actions.insert("Step Factor", atIndex:0)
+        self.tableView.reloadData()
     }
     
     @IBAction func milesKMChanged(sender: AnyObject) {
@@ -252,7 +321,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = notification.userInfo
 //        print("split nofification \(userInfo)")
         let m = userInfo!["miles"]!
-        items.insert(String(format: "%.2f", m as! Float64), atIndex:0)
+        items.insert(String(format: "%.3f", m as! Float64), atIndex:0)
         actions.insert("Split", atIndex:0)
         self.tableView.reloadData()
     }
@@ -385,7 +454,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let setFactorAction = UIAlertAction(title: "Set Factor", style: .Destructive) { (action) in
             //print("Set Factor Btn pushed")
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Swiftly Now! Choose an option!", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Enter Factor", preferredStyle: .Alert)
             
             //Create and add the Cancel action
             let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -403,9 +472,13 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let factor = (textField.text! as NSString).floatValue
                 //print("save: \(factor)")
                 //            self.updateRating(textField.text)
+                self.factorStepper.value = Double(factor)
                 let userInfo = [
                     "factor":factor]
                 NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
+                self.items.insert(String(format: "%.4f", factor), atIndex:0)
+                self.actions.insert("Set Factor", atIndex:0)
+                self.tableView.reloadData()
             })
             alert.addAction(saveAction)
             
@@ -422,7 +495,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let setMileageAction = UIAlertAction(title: "Set Mileage", style: .Destructive) { (action) in
 //            print("Set Mileage Btn pushed")
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Set Mileage", message: "Swiftly Now! Enter Mileage", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Set Mileage", message: "Enter Mileage", preferredStyle: .Alert)
             
             //Create and add the Cancel action
             let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -459,7 +532,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         let addNoteAction = UIAlertAction(title: "Add Note", style: .Destructive) { (action) in
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Add Note", message: "Swiftly Now! Add Note", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Add Note", message: "Add Note", preferredStyle: .Alert)
             
             //Create and add the Cancel action
             let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -506,7 +579,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBAction func setFactorBtn(sender: AnyObject) {
         //print("Set Factor Btn pushed")
         //Create the AlertController
-        let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Swiftly Now! Choose an option!", preferredStyle: .Alert)
+        let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Choose an option!", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -527,6 +600,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             let userInfo = [
                 "factor":factor]
             NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
+            
         })
         alert.addAction(saveAction)
         
@@ -556,7 +630,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         case "miles":
             let m = userInfo!["miles"]!
             self.distance = m as! Float64
-            self.milesLbl.text = (String(format: "%06.2f", m as! Float64))
+            self.milesLbl.text = (String(format: "%06.3f", m as! Float64))
             let im = userInfo!["imMiles"]!
             self.imLbl.text = (String(format: "%06.2f", im as! Float64))
         case "km":
@@ -568,8 +642,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         default:
             break;
         }
-        
-        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
+        if (delegate?.xgps160!.isConnected)! == false {
+            horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
+        }
+
     }
     
     func share() {

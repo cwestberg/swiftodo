@@ -22,6 +22,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     var factor = 1.0000
     var direction = "forward"
     var selectedCounters = "om"
+    var xgpsConnected = false
     
     var startTime = NSDate()
     override init() {
@@ -43,6 +44,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.splitOM(_:)), name: "SplitOM", object: nil)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.setMileage(_:)), name: "SetMileage", object: nil)
+        
+
     }
     
     
@@ -72,7 +75,15 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        if xgpsConnected == false {
+            updateLocation(locations,xgps: false)            
+        }
+    }
+    
+    func updateLocation(locations: [CLLocation],xgps: Bool) {
 //        return
         var prevLocation: CLLocation
         if self.fromLocation.count == 0 {
@@ -84,12 +95,16 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         }
         
         for location in locations {
-//            print(location)
+//            print("location \(location)")
         
 //            if self.fromLocation.count > 0 {
 //            if 1 == 1 {
                 var addDistance = true
 //                let location:CLLocation = locations.last!
+            if xgps == true {
+                
+            }
+            else {
                 if location.speed < 1 {
                     addDistance = false
                 }
@@ -108,6 +123,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 if location.timestamp.timeIntervalSinceReferenceDate < prevLocation.timestamp.timeIntervalSinceReferenceDate {
                     addDistance = false
                 }
+            }
                 if addDistance == true {
 
                     let distance = location.distanceFromLocation(prevLocation)
