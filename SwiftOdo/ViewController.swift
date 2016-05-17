@@ -34,7 +34,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var factor = 1.0000
     var distance = 0.0
     let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
-    
+    var xgpsConnected = false
+   
     
     
     override func viewDidLoad() {
@@ -51,7 +52,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
         delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
-    
+        xgpsConnected = (delegate?.xgps160?.isConnected)!
+  
         
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.split(_:)), name: "Split", object: nil)
@@ -60,13 +62,24 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
 
         //        XGPS API
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.deviceDataUpdated(_:)), name: "DeviceDataUpdated", object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
 
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgp160Connected(_:)), name: "XGPS160Connected", object: nil)
+        EAAccessoryManager.sharedAccessoryManager().registerForLocalNotifications()
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+       
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgps160Connected(_:)), name: "XGPS160Connected", object: nil)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgps160Disconnected(_:)), name: "XGPS160Disconnected", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
+            name: UIApplicationDidBecomeActiveNotification,
+            object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.accessoryDidDisconnect(_:)), name: "EAAccessoryDidDisconnectNotification", object:nil)
+        
+
 
         
         
@@ -76,12 +89,56 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     }
 
-    func xgp160Connected(notification:NSNotification) {
-        print("xgp160Connected")
+    func accessoryDidDisconnect(notification: NSNotification) {
+        print("accessoryDidDisconnect")
+        xgpsConnected = false
+        delegate?.coreLocationController?.xgpsConnected = false
     }
+    
+    func applicationDidBecomeActive(notification: NSNotification) {
+        print("applicationDidBecomeActive notification")
+        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
+        xgpsConnected = (delegate?.xgps160?.isConnected)!
+        print("isConnected? \(delegate?.xgps160!.isConnected)")
+        print("xgpsConnected? \(xgpsConnected)")
+        print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
+        updateXgpsConnected()
+    }
+    
+    func updateXgpsConnected() {
+        if xgpsConnected == true {
+            
+//            self.actions.insert("Connected", atIndex: 0)
+//            self.items.insert("XGPS", atIndex:0)
+//            self.tableView.reloadData()
+
+        }
+        else {
+//            self.xgpsConnectedLbl.text = ""
+//            self.actions.insert("Disconnected", atIndex: 0)
+//            self.items.insert("XGPS", atIndex:0)
+//            self.tableView.reloadData()
+        }
+        
+    }
+    func xgps160Connected(notification:NSNotification) {
+        print("xgp160Connected Notifiction")
+        delegate?.coreLocationController?.xgpsConnected = true
+        xgpsConnected = true
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+//        updateXgpsConnected()
+    }
+    func xgps160Disconnected(notification:NSNotification) {
+        print("xgp160Disconnected Notification")
+        delegate?.coreLocationController?.xgpsConnected = false
+        xgpsConnected = false
+        updateXgpsConnected()
+    }
+    
     func deviceDataUpdated(notification:NSNotification) {
-//        print("deviceDataUpdated")
+        //        print("deviceDataUpdated")
     }
+
     
     func updateUIWithNewPositionData(notification:NSNotification) {
 //        print("updateUIWithNewPositionData")
@@ -96,16 +153,17 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
 //            print(delegate?.xgps160!.hdop)
         guard let hdop = delegate?.xgps160!.hdop
-        
             else {
-                
+                horrizontalAccuracy.text = "?"
+
                 return
         }
 //        let hdop = delegate?.xgps160!.hdop
 //        print(hdop)
         horrizontalAccuracy.text = String(hdop)
-        if Double((hdop)) > 1.0 {
-            print("hdop > 1 \(hdop)")
+
+        if Double((hdop)) > 2.0 {
+            print("hdop > 2 \(hdop)")
         }
 //        print(delegate!.xgps160!.waasInUse)
         

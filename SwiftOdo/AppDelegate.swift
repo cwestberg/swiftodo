@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.coreLocationController = CoreLocationController()
         xgps160 = XGPS160API()
-        xgps160!.setLoggingUpdateRate(1)
+//        xgps160!.setLoggingUpdateRate(1)
         let app = UIApplication .sharedApplication()
         app.idleTimerDisabled = true
         return true
