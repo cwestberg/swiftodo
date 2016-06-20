@@ -247,17 +247,19 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
             }
         }
-        //        controller.gamepad?.rightShoulder
+        //        controller.gamepad?.buttonB
         controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonB")
+                self.zeroIM(self)
                 
-                let userInfo = [
-                    "action":"resetIM"]
-                let zim = String(format: "%.2f", self.splitOM)
-                self.items.insert("ZIM \(zim)", atIndex:0)
-                self.tableView.reloadData()
-                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+//                let userInfo = [
+//                    "action":"resetIM"]
+//                let zim = String(format: "%.2f", self.splitOM)
+//                self.items.insert("ZIM \(zim)", atIndex:0)
+//                self.actions.insert("", atIndex:0)
+//                self.tableView.reloadData()
+//                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
             }
         }
 
