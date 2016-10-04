@@ -33,7 +33,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var splitIM = 0.00
     var factor = 1.0000
     var distance = 0.0
-    let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
+    let delegate = UIApplication.shared.delegate as? AppDelegate
     var xgpsConnected = false
    
     
@@ -44,43 +44,55 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         omStepper.maximumValue = 999.99
         omStepper.minimumValue = -999.99
         
-        milesLbl.layer.borderColor = UIColor.blueColor().CGColor
+        milesLbl.layer.borderColor = UIColor.blue.cgColor
         milesLbl.layer.borderWidth = 1
         milesLbl.layer.cornerRadius = 10
-        imLbl.layer.borderColor = UIColor.blueColor().CGColor
+        imLbl.layer.borderColor = UIColor.blue.cgColor
         imLbl.layer.borderWidth = 1
         imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
-        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
-        xgpsConnected = (delegate?.xgps160?.isConnected)!
+        if let xgps160 = delegate?.xgps160 {
+            let isConnected = (xgps160.isConnected)
+            delegate?.coreLocationController?.xgpsConnected = isConnected
+            xgpsConnected = isConnected}
+        else {
+            
+        }
+
+//        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
+//        xgpsConnected = (delegate?.xgps160?.isConnected)!
   
+        let omTap = UITapGestureRecognizer()
+        omTap.addTarget(self, action: #selector(ViewController.splitFunc(sender:)))
+        milesLbl.addGestureRecognizer(omTap)
+        
+        let imTap = UITapGestureRecognizer()
+        imTap.addTarget(self, action: #selector(ViewController.splitImFunc(sender:)))
+        imLbl.addGestureRecognizer(imTap)
         
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.split(_:)), name: "Split", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: "LOCATION_AVAILABLE", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.split(_:)), name: NSNotification.Name(rawValue: "Split"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: NSNotification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: NSNotification.Name(rawValue: "GCControllerDidConnectNotification"), object: nil)
 
         //        XGPS API
 
-        EAAccessoryManager.sharedAccessoryManager().registerForLocalNotifications()
+        EAAccessoryManager.shared().registerForLocalNotifications()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: NSNotification.Name(rawValue: "PositionDataUpdated"), object: nil)
        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgps160Connected(_:)), name: "XGPS160Connected", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Connected(_:)), name: NSNotification.Name(rawValue: "XGPS160Connected") , object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.xgps160Disconnected(_:)), name: "XGPS160Disconnected", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Disconnected(_:)), name: NSNotification.Name(rawValue: "XGPS160Disconnected"), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
-            name: UIApplicationDidBecomeActiveNotification,
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.accessoryDidDisconnect(_:)), name: "EAAccessoryDidDisconnectNotification", object:nil)
-        
-
-
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.accessoryDidDisconnect(_:)), name: NSNotification.Name(rawValue: "EAAccessoryDidDisconnectNotification") , object:nil)
         
         
         self.tableView.estimatedRowHeight = 100.0
@@ -89,20 +101,29 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     }
 
-    func accessoryDidDisconnect(notification: NSNotification) {
+    func accessoryDidDisconnect(_ notification: Notification) {
         print("accessoryDidDisconnect")
         xgpsConnected = false
         delegate?.coreLocationController?.xgpsConnected = false
     }
     
-    func applicationDidBecomeActive(notification: NSNotification) {
+    func applicationDidBecomeActive(_ notification: Notification) {
         print("applicationDidBecomeActive notification")
-        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
-        xgpsConnected = (delegate?.xgps160?.isConnected)!
-        print("isConnected? \(delegate?.xgps160!.isConnected)")
-        print("xgpsConnected? \(xgpsConnected)")
-        print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
-        updateXgpsConnected()
+        if let xgps160 = delegate?.xgps160 {
+            delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
+            xgpsConnected = (xgps160.isConnected)
+            print("isConnected? \(delegate?.xgps160!.isConnected)")
+            print("xgpsConnected? \(xgpsConnected)")
+            print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
+            updateXgpsConnected()
+            
+        }
+//        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
+//        xgpsConnected = (delegate?.xgps160?.isConnected)!
+//        print("isConnected? \(delegate?.xgps160!.isConnected)")
+//        print("xgpsConnected? \(xgpsConnected)")
+//        print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
+//        updateXgpsConnected()
     }
     
     func updateXgpsConnected() {
@@ -121,26 +142,26 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         
     }
-    func xgps160Connected(notification:NSNotification) {
+    func xgps160Connected(_ notification:Notification) {
         print("xgp160Connected Notifiction")
         delegate?.coreLocationController?.xgpsConnected = true
         xgpsConnected = true
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
 //        updateXgpsConnected()
     }
-    func xgps160Disconnected(notification:NSNotification) {
+    func xgps160Disconnected(_ notification:Notification) {
         print("xgp160Disconnected Notification")
         delegate?.coreLocationController?.xgpsConnected = false
         xgpsConnected = false
         updateXgpsConnected()
     }
     
-    func deviceDataUpdated(notification:NSNotification) {
+    func deviceDataUpdated(_ notification:Notification) {
         //        print("deviceDataUpdated")
     }
 
     
-    func updateUIWithNewPositionData(notification:NSNotification) {
+    func updateUIWithNewPositionData(_ notification:Notification) {
 //        print("updateUIWithNewPositionData")
 //        print(delegate!.xgps160!.utc)
 //        print(delegate!.xgps160!.lat)
@@ -160,7 +181,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
 //        let hdop = delegate?.xgps160!.hdop
 //        print(hdop)
-        horrizontalAccuracy.text = String(hdop)
+        horrizontalAccuracy.text = String(describing: hdop)
 
         if Double((hdop)) > 2.0 {
             print("hdop > 2 \(hdop)")
@@ -180,7 +201,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
         tableView.reloadData()
@@ -192,19 +213,19 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         // Dispose of any resources that can be recreated.
     }
     
-    func controllerDidConnect(notification: NSNotification) {
+    func controllerDidConnect(_ notification: Notification) {
         
         let controller = notification.object as! GCController
         print("controller is \(controller)")
         print("game on ")
-        print("\(controller.gamepad!.buttonA.pressed)")
+        print("\(controller.gamepad!.buttonA.isPressed)")
 
         controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed  && value > 0.2 {
                 print("dpad.up")
                 let userInfo = [
                     "action":"plusOne"]
-                NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "PlusOne"), object: nil, userInfo: userInfo)
             }
         }
         
@@ -213,7 +234,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 print("dpad.up")
                 let userInfo = [
                     "action":"minusOne"]
-                NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "MinusOne"), object: nil, userInfo: userInfo)
             }
         }
         
@@ -223,7 +244,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let direction = "reverse"
                 let userInfo = [
                     "action":"\(direction)"]
-                NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
                 self.directionControl.selectedSegmentIndex = 1
             }
         }
@@ -234,7 +255,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let direction = "forward"
                 let userInfo = [
                     "action":"\(direction)"]
-                NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
                 self.directionControl.selectedSegmentIndex = 0
             }
         }
@@ -244,7 +265,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 print("buttonA")
                 let userInfo = [
                     "action":"reset"]
-                NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
             }
         }
         //        controller.gamepad?.buttonB
@@ -268,7 +289,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 print("buttonY")
                 let userInfo = [
                     "action":"resetBoth"]
-                NSNotificationCenter.defaultCenter().postNotificationName("ResetBoth", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "ResetBoth"), object: nil, userInfo: userInfo)
 //                let counters = "both"
 //                let userInfo = [
 //                    "action":"\(counters)"]
@@ -306,14 +327,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 
                 let userInfo = [
                     "action":"\(counters)"]
-                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "SelectedCountersChanged"), object: nil, userInfo: userInfo)
             }
         }
         controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("rightShoulder")
-                self.actions.insert("Split", atIndex: 0)
-                self.items.insert(self.milesLbl.text!, atIndex:0)
+                self.actions.insert("Split", at: 0)
+                self.items.insert(self.milesLbl.text!, at:0)
                 self.tableView.reloadData()
             }
         }
@@ -321,47 +342,47 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     // Table
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.items.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as UITableViewCell
 //        print(indexPath.row)
 //        print(self.actions.count)
 //        print(self.actions)
-        cell.textLabel?.text = self.items[indexPath.row]
-        cell.detailTextLabel!.text = self.actions[indexPath.row]
+        cell.textLabel?.text = self.items[(indexPath as NSIndexPath).row]
+        cell.detailTextLabel!.text = self.actions[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("You selected cell #\(indexPath.row)!")
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("You selected cell #\((indexPath as NSIndexPath).row)!")
 
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            items.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            items.remove(at: (indexPath as NSIndexPath).row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
     // End Table
     
-    @IBAction func shareBtn(sender: UIButton) {
+    @IBAction func shareBtn(_ sender: UIButton) {
         self.share()
     }
-    @IBAction func factorStepper(sender: UIStepper) {
+    @IBAction func factorStepper(_ sender: UIStepper) {
         self.factor = sender.value
         self.factorLabel.text = String(format: "%.4f",self.factor)
         let userInfo = [
             "factor":factor]
-        NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
-        self.items.insert(String(format: "%.4f", factor), atIndex:0)
-        self.actions.insert("Step Factor", atIndex:0)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "FACTOR_CHANGED"), object: nil, userInfo: userInfo)
+        self.items.insert(String(format: "%.4f", factor), at:0)
+        self.actions.insert("Step Factor", at:0)
         self.tableView.reloadData()
     }
     
-    @IBAction func milesKMChanged(sender: AnyObject) {
+    @IBAction func milesKMChanged(_ sender: AnyObject) {
         
         switch sender.selectedSegmentIndex
         {
@@ -374,28 +395,38 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         let userInfo = [
             "action":"\(distanceType)"]
-        NSNotificationCenter.defaultCenter().postNotificationName("MilesKMSelectionChanged", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "MilesKMSelectionChanged"), object: nil, userInfo: userInfo)
     }
     
-    func split(notification:NSNotification){
-        let userInfo = notification.userInfo
-//        print("split nofification \(userInfo)")
+    func splitFunc(sender:UITapGestureRecognizer) {
+        items.insert(String(format: "%.3f", distance), at:0)
+        actions.insert("Split OM", at:0)
+        self.tableView.reloadData()
+    }
+    func splitImFunc(sender:UITapGestureRecognizer) {
+        items.insert(String(format: "%.3f", distance), at:0)
+        actions.insert("Split IM", at:0)
+        self.tableView.reloadData()
+    }
+    
+    func split(_ notification:Notification){
+        let userInfo = (notification as NSNotification).userInfo
         let m = userInfo!["miles"]!
-        items.insert(String(format: "%.3f", m as! Float64), atIndex:0)
-        actions.insert("Split", atIndex:0)
+        items.insert(String(format: "%.3f", m as! Float64), at:0)
+        actions.insert("Split", at:0)
         self.tableView.reloadData()
     }
     
     // MARK Actions
     
     
-    @IBAction func splitBtn(sender: AnyObject) {
+    @IBAction func splitBtn(_ sender: AnyObject) {
         let userInfo = [
             "action":"splitOM"]
-        NSNotificationCenter.defaultCenter().postNotificationName("SplitOM", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "SplitOM"), object: nil, userInfo: userInfo)
     }
     
-    @IBAction func selectedCountersChanged(sender: AnyObject) {
+    @IBAction func selectedCountersChanged(_ sender: AnyObject) {
 //        SelectedCountersChanged
         var counters = ""
         switch sender.selectedSegmentIndex
@@ -412,9 +443,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = [
             "action":"\(counters)"]
         
-        NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "SelectedCountersChanged"), object: nil, userInfo: userInfo)
     }
-    @IBAction func direction(sender: AnyObject) {
+    @IBAction func direction(_ sender: AnyObject) {
         var direction = ""
         switch sender.selectedSegmentIndex
         {
@@ -430,10 +461,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let userInfo = [
             "action":"\(direction)"]
 
-        NSNotificationCenter.defaultCenter().postNotificationName("DirectionChanged", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
 
     }
-    @IBAction func omStepper(sender: UIStepper) {
+    @IBAction func omStepper(_ sender: UIStepper) {
 //        print(sender)
 //        print(sender.value)
 //        print(oldStepper)
@@ -441,171 +472,171 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         if sender.value < oldStepper{
             let userInfo = [
                 "action":"minusOne"]
-            NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "MinusOne"), object: nil, userInfo: userInfo)
 
         }
         else{
             let userInfo = [
                 "action":"plusOne"]
-            NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "PlusOne"), object: nil, userInfo: userInfo)
         }
         oldStepper = sender.value
 
     }
     
     
-    @IBAction func zeroOdo(sender: AnyObject) {
+    @IBAction func zeroOdo(_ sender: AnyObject) {
         //print("reset Btn pushed")
         let userInfo = [
             "action":"reset"]
-        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
     }
     
-    @IBAction func zeroIM(sender: AnyObject) {
+    @IBAction func zeroIM(_ sender: AnyObject) {
         //print("zeroIM Btn pushed")
         let userInfo = [
             "action":"resetIM"]
         let zim = String(format: "%.2f", self.splitOM)
-        items.insert("\(zim)", atIndex:0)
-        actions.insert("Zero IM", atIndex:0)
+        items.insert("\(zim)", at:0)
+        actions.insert("Zero IM", at:0)
         self.tableView.reloadData()
-        NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "ResetIM"), object: nil, userInfo: userInfo)
     }
    
-    @IBAction func plusMileage(sender: AnyObject) {
+    @IBAction func plusMileage(_ sender: AnyObject) {
         //print("+ Btn pushed")
         let userInfo = [
             "action":"plusOne"]
-        NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "PlusOne"), object: nil, userInfo: userInfo)
     }
     
-    @IBAction func minusMileage(sender: AnyObject) {
+    @IBAction func minusMileage(_ sender: AnyObject) {
         //print("- Btn pushed")
         let userInfo = [
             "action":"minusOne"]
-        NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "MinusOne"), object: nil, userInfo: userInfo)
     }
     
-    @IBAction func dialogActions(sender: AnyObject) {
+    @IBAction func dialogActions(_ sender: AnyObject) {
         let splitDistance = self.distance
 
-        let alertController = UIAlertController(title: "Actions", message: "Select Action to perform", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Actions", message: "Select Action to perform", preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             //print(action)
         }
         alertController.addAction(cancelAction)
         
-        let clearTable = UIAlertAction(title: "Clear Splits", style: .Destructive) {(action) in
+        let clearTable = UIAlertAction(title: "Clear Splits", style: .destructive) {(action) in
             self.items.removeAll()
             self.tableView.reloadData()
         }
         alertController.addAction(clearTable)
 
         
-        let zeroAction = UIAlertAction(title: "Reset Trip Meters", style: .Destructive) {(action) in
+        let zeroAction = UIAlertAction(title: "Reset Trip Meters", style: .destructive) {(action) in
             let userInfo = [
                "action":"resetBoth"]
-            NSNotificationCenter.defaultCenter().postNotificationName("ResetBoth", object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "ResetBoth"), object: nil, userInfo: userInfo)
         }
         alertController.addAction(zeroAction)
     
         
-        let setFactorAction = UIAlertAction(title: "Set Factor", style: .Destructive) { (action) in
+        let setFactorAction = UIAlertAction(title: "Set Factor", style: .destructive) { (action) in
             //print("Set Factor Btn pushed")
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Enter Factor", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Enter Factor", preferredStyle: .alert)
             
             //Create and add the Cancel action
-            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
                 //Do some stuff
             }
             alert.addAction(cancelAction)
             
-            let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+            let saveAction = UIAlertAction(title: "Save", style: .default, handler: { (action: UIAlertAction!) in
                 
                 //let textField = alert.textFields![0] as UITextField
                 let textField = alert.textFields![0] as UITextField
                 self.factorLabel.text = textField.text
                 
-                textField.keyboardType = UIKeyboardType.NumberPad
+                textField.keyboardType = UIKeyboardType.numberPad
                 let factor = (textField.text! as NSString).floatValue
                 //print("save: \(factor)")
                 //            self.updateRating(textField.text)
                 self.factorStepper.value = Double(factor)
                 let userInfo = [
                     "factor":factor]
-                NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
-                self.items.insert(String(format: "%.4f", factor), atIndex:0)
-                self.actions.insert("Set Factor", atIndex:0)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "FACTOR_CHANGED"), object: nil, userInfo: userInfo)
+                self.items.insert(String(format: "%.4f", factor), at:0)
+                self.actions.insert("Set Factor", at:0)
                 self.tableView.reloadData()
             })
             alert.addAction(saveAction)
             
             //Add a text field
-            alert.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-                textField.keyboardType = UIKeyboardType.DecimalPad
+            alert.addTextField { (textField: UITextField!) in
+                textField.keyboardType = UIKeyboardType.decimalPad
                 textField.text = self.factorLabel.text
             }
             
             //Present the AlertController
-            self.presentViewController(alert, animated: true, completion: nil)        }
+            self.present(alert, animated: true, completion: nil)        }
         alertController.addAction(setFactorAction)
         
-        let setMileageAction = UIAlertAction(title: "Set Mileage", style: .Destructive) { (action) in
+        let setMileageAction = UIAlertAction(title: "Set Mileage", style: .destructive) { (action) in
 //            print("Set Mileage Btn pushed")
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Set Mileage", message: "Enter Mileage", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Set Mileage", message: "Enter Mileage", preferredStyle: .alert)
             
             //Create and add the Cancel action
-            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
                 //Do some stuff
             }
             alert.addAction(cancelAction)
             
-            let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+            let saveAction = UIAlertAction(title: "Save", style: .default, handler: { (action: UIAlertAction!) in
                 
                 let textField = alert.textFields![0] as UITextField
                 
-                textField.keyboardType = UIKeyboardType.NumberPad
+                textField.keyboardType = UIKeyboardType.numberPad
                 let newMileage = (textField.text! as NSString).floatValue
 //                print("save: \(newMileage)")
                 let userInfo = [
                     "newMileage":newMileage]
-                NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "SetMileage"), object: nil, userInfo: userInfo)
             })
            alert.addAction(saveAction)
             
             //Add a text field
-            alert.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-                textField.keyboardType = UIKeyboardType.DecimalPad
+            alert.addTextField { (textField: UITextField!) in
+                textField.keyboardType = UIKeyboardType.decimalPad
                 textField.text = ""
             }
         
             //Present the AlertController
-            self.presentViewController(alert, animated: true, completion: nil)        }
+            self.present(alert, animated: true, completion: nil)        }
         alertController.addAction(setMileageAction)
 
 //        self.presentViewController(alertController, animated: true) {
 //            // ...
 //        }
         
-        let addNoteAction = UIAlertAction(title: "Add Note", style: .Destructive) { (action) in
+        let addNoteAction = UIAlertAction(title: "Add Note", style: .destructive) { (action) in
             //Create the AlertController
-            let alert: UIAlertController = UIAlertController(title: "Add Note", message: "Add Note", preferredStyle: .Alert)
+            let alert: UIAlertController = UIAlertController(title: "Add Note", message: "Add Note", preferredStyle: .alert)
             
             //Create and add the Cancel action
-            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
                 //Do some stuff
             }
             alert.addAction(cancelAction)
             
-            let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+            let saveAction = UIAlertAction(title: "Save", style: .default, handler: { (action: UIAlertAction!) in
                 
                 let textField = alert.textFields![0] as UITextField
 //                print(textField.text!)
-                self.items.insert("\(String(format: "%.2f", splitDistance))", atIndex:0)
-                self.actions.insert("\(textField.text!)", atIndex:0)
+                self.items.insert("\(String(format: "%.2f", splitDistance))", at:0)
+                self.actions.insert("\(textField.text!)", at:0)
 
                 self.tableView.reloadData()
                 
@@ -613,15 +644,15 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             alert.addAction(saveAction)
             
             //Add a text field
-            alert.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
+            alert.addTextField { (textField: UITextField!) in
                 textField.text = ""
             }
             
             //Present the AlertController
-            self.presentViewController(alert, animated: true, completion: nil)        }
+            self.present(alert, animated: true, completion: nil)        }
         alertController.addAction(addNoteAction)
         
-        self.presentViewController(alertController, animated: true) {
+        self.present(alertController, animated: true) {
             // ...
         }
 
@@ -629,53 +660,53 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
 
 
-    @IBAction func resetBtn(sender: AnyObject) {
+    @IBAction func resetBtn(_ sender: AnyObject) {
         //print("reset Btn pushed")
         let userInfo = [
             "action":"reset"]
-        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
     }
     
-    @IBAction func setFactorBtn(sender: AnyObject) {
+    @IBAction func setFactorBtn(_ sender: AnyObject) {
         //print("Set Factor Btn pushed")
         //Create the AlertController
-        let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Choose an option!", preferredStyle: .Alert)
+        let alert: UIAlertController = UIAlertController(title: "Set Factor", message: "Choose an option!", preferredStyle: .alert)
         
         //Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
             //Do some stuff
         }
         alert.addAction(cancelAction)
         
-        let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: { (action: UIAlertAction!) in
             
             //let textField = alert.textFields![0] as UITextField
             let textField = alert.textFields![0] as UITextField
             self.factorLabel.text = textField.text
 
-            textField.keyboardType = UIKeyboardType.NumberPad
+            textField.keyboardType = UIKeyboardType.numberPad
             let factor = (textField.text! as NSString).floatValue
             //print("save: \(factor)")
 //            self.updateRating(textField.text)
             let userInfo = [
                 "factor":factor]
-            NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "FACTOR_CHANGED"), object: nil, userInfo: userInfo)
             
         })
         alert.addAction(saveAction)
         
         //Add a text field
-        alert.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-            textField.keyboardType = UIKeyboardType.DecimalPad
+        alert.addTextField { (textField: UITextField!) in
+            textField.keyboardType = UIKeyboardType.decimalPad
             textField.text = self.factorLabel.text
         }
         
         //Present the AlertController
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func locationAvailable(notification:NSNotification) -> Void {
-        let userInfo = notification.userInfo
+    func locationAvailable(_ notification:Notification) -> Void {
+        let userInfo = (notification as NSNotification).userInfo
 //        print("Odometer UserInfo: \(userInfo)")
 //        print(userInfo!["miles"]!)
 //        let m = userInfo!["miles"]!
@@ -703,7 +734,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             break;
         }
         if (delegate?.xgps160!.isConnected)! == false {
-            horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
+            horrizontalAccuracy.text = String(describing: userInfo!["horizontalAccuracy"]!)
         }
 
     }
@@ -719,12 +750,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         //        let firstActivityItem = "\(self.splits)"
         let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: firstActivityItem, applicationActivities: nil)
-        presentViewController(activityViewController, animated:true, completion: nil)
+        present(activityViewController, animated:true, completion: nil)
         
     }
 
     
-    func stringFromTimeInterval(interval:NSTimeInterval) -> NSString {
+    func stringFromTimeInterval(_ interval:TimeInterval) -> NSString {
         
         let ti = NSInteger(interval)
         

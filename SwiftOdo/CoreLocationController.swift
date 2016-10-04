@@ -24,7 +24,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     var selectedCounters = "om"
     var xgpsConnected = false
     
-    var startTime = NSDate()
+    var startTime = Date()
     override init() {
         self.miles = 0.0
         self.factor = 1.0
@@ -32,39 +32,39 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestAlwaysAuthorization()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.reset(_:)), name: "Reset", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetIM(_:)), name: "ResetIM", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetBoth(_:)), name: "ResetBoth", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.reset(_:)), name: NSNotification.Name(rawValue: "Reset"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.resetIM(_:)), name: NSNotification.Name(rawValue: "ResetIM") , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.resetBoth(_:)), name: NSNotification.Name(rawValue: "ResetBoth") , object: nil)
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("zeroIntervalTime:"), name: "ZeroInterval", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.factorChanged(_:)), name: "FACTOR_CHANGED", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.plusOne(_:)), name: "PlusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.minusOne(_:)), name: "MinusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.directionChanged(_:)), name: "DirectionChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.selectedCountersChanged(_:)), name: "SelectedCountersChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.splitOM(_:)), name: "SplitOM", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.factorChanged(_:)), name: NSNotification.Name(rawValue: "FACTOR_CHANGED") , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.plusOne(_:)), name: NSNotification.Name(rawValue: "PlusOne") , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.minusOne(_:)), name: NSNotification.Name(rawValue: "MinusOne") , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.directionChanged(_:)), name: NSNotification.Name(rawValue: "DirectionChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.selectedCountersChanged(_:)), name: NSNotification.Name(rawValue: "SelectedCountersChanged") , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.splitOM(_:)), name: NSNotification.Name(rawValue: "SplitOM") , object: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.setMileage(_:)), name: "SetMileage", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CoreLocationController.setMileage(_:)), name: NSNotification.Name(rawValue: "SetMileage") , object: nil)
         
 
     }
     
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         //print("didChangeAuthorizationStatus")
         
         switch status {
-        case .NotDetermined:
+        case .notDetermined:
             print(".NotDetermined")
             break
             
-        case .Authorized:
+        case .authorizedAlways:
             print(".Authorized")
             self.locationManager.startUpdatingLocation()
 //            fromLocation = self.locationManager.location!
         //    self.fromLocation = CLLocation()
             break
             
-        case .Denied:
+        case .denied:
             print(".Denied")
             break
             
@@ -77,13 +77,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+    @objc(locationManager:didUpdateLocations:) func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         if xgpsConnected == false {
             updateLocation(locations,xgps: false)            
         }
     }
     
-    func updateLocation(locations: [CLLocation],xgps: Bool) {
+    func updateLocation(_ locations: [CLLocation],xgps: Bool) {
 //        return
         var prevLocation: CLLocation
         if self.fromLocation.count == 0 {
@@ -126,7 +126,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             }
                 if addDistance == true {
 
-                    let distance = location.distanceFromLocation(prevLocation)
+                    let distance = location.distance(from: prevLocation)
                     let updateChoices = (self.direction, self.selectedCounters)
                     switch updateChoices
                     {
@@ -161,7 +161,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                     self.imKM = (imMeters/1000) * self.factor
                 }
                 
-                let elapsedTime = NSDate().timeIntervalSinceDate(self.startTime)
+                let elapsedTime = Date().timeIntervalSince(self.startTime)
                 var averageSpeed = 3600 * (miles/(elapsedTime))
                 if averageSpeed > 100 {
                     averageSpeed = 100
@@ -176,9 +176,9 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                     "longitude":location.coordinate.longitude,
                     "horizontalAccuracy":location.horizontalAccuracy,
                     "averageSpeed":averageSpeed,
-                    "et":elapsedTime]
+                    "et":elapsedTime] as [String : Any]
                 
-                NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
                 prevLocation = location
 //            }
         }
@@ -186,11 +186,11 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.fromLocation = locations
     }
     
-    func splitOM(notification:NSNotification) -> Void {
+    func splitOM(_ notification:Notification) -> Void {
         guard let _ = self.fromLocation.last
             else {
                 let userInfo = [
-                    "timestamp":NSDate(),
+                    "timestamp":Date(),
                     "course":0.0,
                     "miles":miles,
                     "imMiles":self.imMiles,
@@ -199,8 +199,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                     "speed":45,
                     "latitude":44.875328,
                     "longitude": -91.939003,
-                    "horizontalAccuracy":5]
-                NSNotificationCenter.defaultCenter().postNotificationName("Split", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+                    "horizontalAccuracy":5] as [String : Any]
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "Split"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
                 return
         }
         let userInfo = [
@@ -211,26 +211,26 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
-            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy]
-        NSNotificationCenter.defaultCenter().postNotificationName("Split", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "Split"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
 
     
-    func selectedCountersChanged(notification:NSNotification) -> Void {
+    func selectedCountersChanged(_ notification:Notification) -> Void {
 //        print("selectedCountersChanged")
-        let userInfo = notification.userInfo
+        let userInfo = (notification as NSNotification).userInfo
         let ctrs = userInfo!["action"]!
         self.selectedCounters = ctrs as! String
     }
     
-    func directionChanged(notification:NSNotification) -> Void {
+    func directionChanged(_ notification:Notification) -> Void {
 //        print("change direction")
-        let userInfo = notification.userInfo
+        let userInfo = (notification as NSNotification).userInfo
         let newDirection = userInfo!["action"]!
         self.direction = newDirection as! String
     }
     
-    func reset(notification:NSNotification) -> Void {
+    func reset(_ notification:Notification) -> Void {
 //        let userInfo = notification.userInfo
 //        print("reset notification: \(userInfo))")
         self.meters = 0.00
@@ -239,7 +239,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         dummyLocationNotification()
     }
     
-    func resetIM(notification:NSNotification) -> Void {
+    func resetIM(_ notification:Notification) -> Void {
         self.imMeters = 0.00
         self.imMiles = 0.000
         self.imKM = 0.0
@@ -247,7 +247,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
 
     }
     
-    func resetBoth(notification:NSNotification) -> Void {
+    func resetBoth(_ notification:Notification) -> Void {
         self.meters = 0.00
         self.miles = 0.000
         self.imMeters = 0.00
@@ -259,8 +259,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     
-    func factorChanged(notification:NSNotification) -> Void {
-        let userInfo = notification.userInfo
+    func factorChanged(_ notification:Notification) -> Void {
+        let userInfo = (notification as NSNotification).userInfo
         let newFactor = userInfo!["factor"]!
 //        print("ChangeFactor Notification: \(newFactor) \(self.meters)")
         self.factor = newFactor as! Float64
@@ -283,7 +283,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.imKM = (self.imMeters/1000)
         
         let userInfo = [
-            "timestamp":NSDate(),
+            "timestamp":Date(),
             "course":0.0,
             "miles":miles,
             "imMiles":self.imMiles,
@@ -292,11 +292,11 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "speed":45,
             "latitude":44.875328,
             "longitude": -91.939003,
-            "horizontalAccuracy":5]
-        NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+            "horizontalAccuracy":5] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
     
-    func plusOne(notification:NSNotification) -> Void {
+    func plusOne(_ notification:Notification) -> Void {
 //        guard let _ = self.fromLocation.last
 //            else {
 //                return
@@ -338,11 +338,11 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
-            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy]
-        NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
     
-    func minusOne(notification:NSNotification) -> Void {
+    func minusOne(_ notification:Notification) -> Void {
 //        guard let _ = self.fromLocation.last
 //            else {
 //                return
@@ -389,13 +389,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "speed":Int(self.fromLocation.last!.speed * 2.23694),
             "latitude":self.fromLocation.last!.coordinate.latitude,
             "longitude":self.fromLocation.last!.coordinate.longitude,
-            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy]
-        NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+            "horizontalAccuracy":self.fromLocation.last!.horizontalAccuracy] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
     
 
-    func setMileage(notification:NSNotification) -> Void {
-        var userInfo = notification.userInfo
+    func setMileage(_ notification:Notification) -> Void {
+        var userInfo = (notification as NSNotification).userInfo
 //        print("setMileage notification: \(userInfo))")
         let newMileage = userInfo!["newMileage"] as! Float64
         let newMilesAsKM = newMileage * 1.60934
@@ -411,7 +411,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         userInfo!["imMiles"] = self.imMiles
         userInfo!["imKM"] = self.imKM
         userInfo!["horizontalAccuracy"] = 5  //Fake
-        NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo! as [NSObject : AnyObject])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo! as [NSObject : AnyObject])
     }
     
     func makeLocationNotification() -> Void {
@@ -427,10 +427,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "speed":Int(self.currentLocations.last!.speed * 2.23694),
             "latitude":self.currentLocations.last!.coordinate.latitude,
             "longitude":self.currentLocations.last!.coordinate.longitude,
-            "horizontalAccuracy":self.currentLocations.last!.horizontalAccuracy]
+            "horizontalAccuracy":self.currentLocations.last!.horizontalAccuracy] as [String : Any]
 //        print("makeLocationNotification \(userInfo))")
 
-        NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
 
 }
