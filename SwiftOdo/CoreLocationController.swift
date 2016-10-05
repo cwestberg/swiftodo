@@ -77,7 +77,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     
     
-    @objc(locationManager:didUpdateLocations:) func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+//    @objc(locationManager:didUpdateLocations:)
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         
 //        print("xgpsConnected \(xgpsConnected)")
 //        if xgpsConnected == false {
@@ -399,9 +400,9 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func setMileage(_ notification:Notification) -> Void {
         var userInfo = (notification as NSNotification).userInfo
 //        print("setMileage notification: \(userInfo))")
-        let newMileage = userInfo!["newMileage"] as! Float64
+        let newMileage = userInfo!["newMileage"] as! Double
         let newMilesAsKM = newMileage * 1.60934
-        self.meters = newMilesAsKM * 1000
+        self.meters = newMilesAsKM * 1000.0
         let distanceInMiles:Float64 = ((self.meters * 0.000621371)) * self.factor
         self.miles = distanceInMiles
         let distanceInMeters:Float64 = ((self.imMeters * 0.000621371)) * self.factor

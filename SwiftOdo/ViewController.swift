@@ -600,7 +600,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let textField = alert.textFields![0] as UITextField
                 
                 textField.keyboardType = UIKeyboardType.numberPad
-                let newMileage = (textField.text! as NSString).floatValue
+                let newMileage = (textField.text! as NSString).doubleValue
 //                print("save: \(newMileage)")
                 let userInfo = [
                     "newMileage":newMileage]
@@ -722,7 +722,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         case "miles":
             let m = userInfo!["miles"]!
             self.distance = m as! Float64
-            self.milesLbl.text = (String(format: "%06.3f", m as! Float64))
+            self.milesLbl.text = (String(format: "%06.2f", m as! Float64))
             let im = userInfo!["imMiles"]!
             self.imLbl.text = (String(format: "%06.2f", im as! Float64))
         case "km":
