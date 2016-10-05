@@ -22,7 +22,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     var factor = 1.0000
     var direction = "forward"
     var selectedCounters = "om"
-    var xgpsConnected = false
+//    var xgpsConnected = false
     
     var startTime = Date()
     override init() {
@@ -50,7 +50,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        //print("didChangeAuthorizationStatus")
+        print("didChangeAuthorizationStatus")
         
         switch status {
         case .notDetermined:
@@ -78,9 +78,11 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     
     @objc(locationManager:didUpdateLocations:) func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        if xgpsConnected == false {
+        
+//        print("xgpsConnected \(xgpsConnected)")
+//        if xgpsConnected == false {
             updateLocation(locations,xgps: false)            
-        }
+//        }
     }
     
     func updateLocation(_ locations: [CLLocation],xgps: Bool) {

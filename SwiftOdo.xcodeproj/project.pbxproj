@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A32FA3F1CD008DA00D71641 /* XGPS160API.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A32FA3E1CD008DA00D71641 /* XGPS160API.m */; };
 		2A5406CE1BE40CD200BE954D /* CoreLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */; };
 		2A61E2D11BE3DBEC00EA4507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */; };
 		2A61E2D31BE3DBEC00EA4507 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61E2D21BE3DBEC00EA4507 /* ViewController.swift */; };
@@ -37,8 +36,6 @@
 
 /* Begin PBXFileReference section */
 		2A32FA3C1CD008D900D71641 /* SwiftOdo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftOdo-Bridging-Header.h"; sourceTree = "<group>"; };
-		2A32FA3D1CD008DA00D71641 /* XGPS160API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XGPS160API.h; path = "../../../Dropbox/SkyPro Sample App V 1.4.4.1/SkyproSampleApp/XGPS160API.h"; sourceTree = "<group>"; };
-		2A32FA3E1CD008DA00D71641 /* XGPS160API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XGPS160API.m; path = "../../../Dropbox/SkyPro Sample App V 1.4.4.1/SkyproSampleApp/XGPS160API.m"; sourceTree = "<group>"; };
 		2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreLocationController.swift; sourceTree = "<group>"; };
 		2A61E2CD1BE3DBEC00EA4507 /* SwiftOdo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftOdo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -104,8 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				2A61E2D01BE3DBEC00EA4507 /* AppDelegate.swift */,
-				2A32FA3D1CD008DA00D71641 /* XGPS160API.h */,
-				2A32FA3E1CD008DA00D71641 /* XGPS160API.m */,
 				2A5406CD1BE40CD200BE954D /* CoreLocationController.swift */,
 				2A61E2D21BE3DBEC00EA4507 /* ViewController.swift */,
 				2A61E2D41BE3DBEC00EA4507 /* Main.storyboard */,
@@ -277,7 +272,6 @@
 			files = (
 				2A5406CE1BE40CD200BE954D /* CoreLocationController.swift in Sources */,
 				2A61E2D31BE3DBEC00EA4507 /* ViewController.swift in Sources */,
-				2A32FA3F1CD008DA00D71641 /* XGPS160API.m in Sources */,
 				2A61E2D11BE3DBEC00EA4507 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

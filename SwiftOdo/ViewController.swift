@@ -51,13 +51,13 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         imLbl.layer.borderWidth = 1
         imLbl.layer.cornerRadius = 10
         self.factorLabel.text = "1.0000"
-        if let xgps160 = delegate?.xgps160 {
-            let isConnected = (xgps160.isConnected)
-            delegate?.coreLocationController?.xgpsConnected = isConnected
-            xgpsConnected = isConnected}
-        else {
-            
-        }
+//        if let xgps160 = delegate?.xgps160 {
+//            let isConnected = (xgps160.isConnected)
+//            delegate?.coreLocationController?.xgpsConnected = isConnected
+//            xgpsConnected = isConnected}
+//        else {
+//            print("not connected.......")
+//        }
 
 //        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
 //        xgpsConnected = (delegate?.xgps160?.isConnected)!
@@ -74,25 +74,25 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.split(_:)), name: NSNotification.Name(rawValue: "Split"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: NSNotification.Name(rawValue: "LOCATION_AVAILABLE"), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: NSNotification.Name(rawValue: "GCControllerDidConnectNotification"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: NSNotification.Name(rawValue: "GCControllerDidConnectNotification"), object: nil)
 
         //        XGPS API
 
-        EAAccessoryManager.shared().registerForLocalNotifications()
+//        EAAccessoryManager.shared().registerForLocalNotifications()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: NSNotification.Name(rawValue: "PositionDataUpdated"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: NSNotification.Name(rawValue: "PositionDataUpdated"), object: nil)
        
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Connected(_:)), name: NSNotification.Name(rawValue: "XGPS160Connected") , object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Connected(_:)), name: NSNotification.Name(rawValue: "XGPS160Connected") , object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Disconnected(_:)), name: NSNotification.Name(rawValue: "XGPS160Disconnected"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.xgps160Disconnected(_:)), name: NSNotification.Name(rawValue: "XGPS160Disconnected"), object: nil)
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
-            name: NSNotification.Name.UIApplicationDidBecomeActive,
-            object: nil)
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
+//            name: NSNotification.Name.UIApplicationDidBecomeActive,
+//            object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.accessoryDidDisconnect(_:)), name: NSNotification.Name(rawValue: "EAAccessoryDidDisconnectNotification") , object:nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.accessoryDidDisconnect(_:)), name: NSNotification.Name(rawValue: "EAAccessoryDidDisconnectNotification") , object:nil)
         
         
         self.tableView.estimatedRowHeight = 100.0
@@ -101,23 +101,23 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     }
 
-    func accessoryDidDisconnect(_ notification: Notification) {
-        print("accessoryDidDisconnect")
-        xgpsConnected = false
-        delegate?.coreLocationController?.xgpsConnected = false
-    }
+//    func accessoryDidDisconnect(_ notification: Notification) {
+//        print("accessoryDidDisconnect")
+//        xgpsConnected = false
+//        delegate?.coreLocationController?.xgpsConnected = false
+//    }
     
     func applicationDidBecomeActive(_ notification: Notification) {
         print("applicationDidBecomeActive notification")
-        if let xgps160 = delegate?.xgps160 {
-            delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
-            xgpsConnected = (xgps160.isConnected)
-            print("isConnected? \(delegate?.xgps160!.isConnected)")
-            print("xgpsConnected? \(xgpsConnected)")
-            print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
-            updateXgpsConnected()
-            
-        }
+//        if let xgps160 = delegate?.xgps160 {
+//            delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
+//            xgpsConnected = (xgps160.isConnected)
+//            print("isConnected? \(delegate?.xgps160!.isConnected)")
+//            print("xgpsConnected? \(xgpsConnected)")
+//            print("coreLocation connectd \(delegate?.coreLocationController?.xgpsConnected)")
+//            updateXgpsConnected()
+//            
+//        }
 //        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160?.isConnected)!
 //        xgpsConnected = (delegate?.xgps160?.isConnected)!
 //        print("isConnected? \(delegate?.xgps160!.isConnected)")
@@ -126,78 +126,78 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //        updateXgpsConnected()
     }
     
-    func updateXgpsConnected() {
-        if xgpsConnected == true {
-            
-//            self.actions.insert("Connected", atIndex: 0)
-//            self.items.insert("XGPS", atIndex:0)
-//            self.tableView.reloadData()
-
-        }
-        else {
-//            self.xgpsConnectedLbl.text = ""
-//            self.actions.insert("Disconnected", atIndex: 0)
-//            self.items.insert("XGPS", atIndex:0)
-//            self.tableView.reloadData()
-        }
-        
-    }
-    func xgps160Connected(_ notification:Notification) {
-        print("xgp160Connected Notifiction")
-        delegate?.coreLocationController?.xgpsConnected = true
-        xgpsConnected = true
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+//    func updateXgpsConnected() {
+//        if xgpsConnected == true {
+//            
+////            self.actions.insert("Connected", atIndex: 0)
+////            self.items.insert("XGPS", atIndex:0)
+////            self.tableView.reloadData()
+//
+//        }
+//        else {
+////            self.xgpsConnectedLbl.text = ""
+////            self.actions.insert("Disconnected", atIndex: 0)
+////            self.items.insert("XGPS", atIndex:0)
+////            self.tableView.reloadData()
+//        }
+//        
+//    }
+//    func xgps160Connected(_ notification:Notification) {
+//        print("xgp160Connected Notifiction")
+//        delegate?.coreLocationController?.xgpsConnected = true
+//        xgpsConnected = true
+////        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
+////        updateXgpsConnected()
+//    }
+//    func xgps160Disconnected(_ notification:Notification) {
+//        print("xgp160Disconnected Notification")
+//        delegate?.coreLocationController?.xgpsConnected = false
+//        xgpsConnected = false
 //        updateXgpsConnected()
-    }
-    func xgps160Disconnected(_ notification:Notification) {
-        print("xgp160Disconnected Notification")
-        delegate?.coreLocationController?.xgpsConnected = false
-        xgpsConnected = false
-        updateXgpsConnected()
-    }
+//    }
     
-    func deviceDataUpdated(_ notification:Notification) {
-        //        print("deviceDataUpdated")
-    }
+//    func deviceDataUpdated(_ notification:Notification) {
+//        //        print("deviceDataUpdated")
+//    }
 
     
-    func updateUIWithNewPositionData(_ notification:Notification) {
-//        print("updateUIWithNewPositionData")
-//        print(delegate!.xgps160!.utc)
-//        print(delegate!.xgps160!.lat)
-//        print(delegate!.xgps160!.lon)
-        let latitude: CLLocationDegrees = Double(delegate!.xgps160!.lat)
-        let longitude: CLLocationDegrees = Double(delegate!.xgps160!.lon)
-        
-        let location: CLLocation = CLLocation(latitude: latitude,
-                                              longitude: longitude)
-
-//            print(delegate?.xgps160!.hdop)
-        guard let hdop = delegate?.xgps160!.hdop
-            else {
-                horrizontalAccuracy.text = "?"
-
-                return
-        }
-//        let hdop = delegate?.xgps160!.hdop
-//        print(hdop)
-        horrizontalAccuracy.text = String(describing: hdop)
-
-        if Double((hdop)) > 2.0 {
-            print("hdop > 2 \(hdop)")
-        }
-//        print(delegate!.xgps160!.waasInUse)
-        
-        if ((delegate?.xgps160!.speedAndCourseIsValid) != nil) && delegate?.xgps160!.fixType == 3
-        {
-            if Double(hdop) > 2.0 {return}
-            if Double(delegate!.xgps160!.speedKph) < 1.5 {return}
-
-            delegate?.coreLocationController?.updateLocation([location],xgps: true)
-
-        }
-        
-    }
+//    func updateUIWithNewPositionData(_ notification:Notification) {
+////        print("updateUIWithNewPositionData")
+////        print(delegate!.xgps160!.utc)
+////        print(delegate!.xgps160!.lat)
+////        print(delegate!.xgps160!.lon)
+//        let latitude: CLLocationDegrees = Double(delegate!.xgps160!.lat)
+//        let longitude: CLLocationDegrees = Double(delegate!.xgps160!.lon)
+//        
+//        let location: CLLocation = CLLocation(latitude: latitude,
+//                                              longitude: longitude)
+//
+////            print(delegate?.xgps160!.hdop)
+//        guard let hdop = delegate?.xgps160!.hdop
+//            else {
+//                horrizontalAccuracy.text = "?"
+//
+//                return
+//        }
+////        let hdop = delegate?.xgps160!.hdop
+////        print(hdop)
+//        horrizontalAccuracy.text = String(describing: hdop)
+//
+//        if Double((hdop)) > 2.0 {
+//            print("hdop > 2 \(hdop)")
+//        }
+////        print(delegate!.xgps160!.waasInUse)
+//        
+//        if ((delegate?.xgps160!.speedAndCourseIsValid) != nil) && delegate?.xgps160!.fixType == 3
+//        {
+//            if Double(hdop) > 2.0 {return}
+//            if Double(delegate!.xgps160!.speedKph) < 1.5 {return}
+//
+//            delegate?.coreLocationController?.updateLocation([location],xgps: true)
+//
+//        }
+//        
+//    }
     
     
     
@@ -213,132 +213,132 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         // Dispose of any resources that can be recreated.
     }
     
-    func controllerDidConnect(_ notification: Notification) {
-        
-        let controller = notification.object as! GCController
-        print("controller is \(controller)")
-        print("game on ")
-        print("\(controller.gamepad!.buttonA.isPressed)")
-
-        controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed  && value > 0.2 {
-                print("dpad.up")
-                let userInfo = [
-                    "action":"plusOne"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "PlusOne"), object: nil, userInfo: userInfo)
-            }
-        }
-        
-        controller.gamepad?.dpad.down.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed && value > 0.2  {
-                print("dpad.up")
-                let userInfo = [
-                    "action":"minusOne"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "MinusOne"), object: nil, userInfo: userInfo)
-            }
-        }
-        
-        controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed  && value > 0.2 {
-                print("dpad.left")
-                let direction = "reverse"
-                let userInfo = [
-                    "action":"\(direction)"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
-                self.directionControl.selectedSegmentIndex = 1
-            }
-        }
-        
-        controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed && value > 0.2  {
-                print("dpad.right")
-                let direction = "forward"
-                let userInfo = [
-                    "action":"\(direction)"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
-                self.directionControl.selectedSegmentIndex = 0
-            }
-        }
-        
-        controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
-                print("buttonA")
-                let userInfo = [
-                    "action":"reset"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
-            }
-        }
-        //        controller.gamepad?.buttonB
-        controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
-                print("buttonB")
-                self.zeroIM(self)
-                
+//    func controllerDidConnect(_ notification: Notification) {
+//        
+//        let controller = notification.object as! GCController
+//        print("controller is \(controller)")
+//        print("game on ")
+//        print("\(controller.gamepad!.buttonA.isPressed)")
+//
+//        controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed  && value > 0.2 {
+//                print("dpad.up")
 //                let userInfo = [
-//                    "action":"resetIM"]
-//                let zim = String(format: "%.2f", self.splitOM)
-//                self.items.insert("ZIM \(zim)", atIndex:0)
-//                self.actions.insert("", atIndex:0)
-//                self.tableView.reloadData()
-//                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
-            }
-        }
-
-        controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
-                print("buttonY")
-                let userInfo = [
-                    "action":"resetBoth"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "ResetBoth"), object: nil, userInfo: userInfo)
-//                let counters = "both"
+//                    "action":"plusOne"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "PlusOne"), object: nil, userInfo: userInfo)
+//            }
+//        }
+//        
+//        controller.gamepad?.dpad.down.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed && value > 0.2  {
+//                print("dpad.up")
+//                let userInfo = [
+//                    "action":"minusOne"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "MinusOne"), object: nil, userInfo: userInfo)
+//            }
+//        }
+//        
+//        controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed  && value > 0.2 {
+//                print("dpad.left")
+//                let direction = "reverse"
+//                let userInfo = [
+//                    "action":"\(direction)"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
+//                self.directionControl.selectedSegmentIndex = 1
+//            }
+//        }
+//        
+//        controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed && value > 0.2  {
+//                print("dpad.right")
+//                let direction = "forward"
+//                let userInfo = [
+//                    "action":"\(direction)"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "DirectionChanged"), object: nil, userInfo: userInfo)
+//                self.directionControl.selectedSegmentIndex = 0
+//            }
+//        }
+//        
+//        controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed {
+//                print("buttonA")
+//                let userInfo = [
+//                    "action":"reset"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
+//            }
+//        }
+//        //        controller.gamepad?.buttonB
+//        controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed {
+//                print("buttonB")
+//                self.zeroIM(self)
+//                
+////                let userInfo = [
+////                    "action":"resetIM"]
+////                let zim = String(format: "%.2f", self.splitOM)
+////                self.items.insert("ZIM \(zim)", atIndex:0)
+////                self.actions.insert("", atIndex:0)
+////                self.tableView.reloadData()
+////                NSNotificationCenter.defaultCenter().postNotificationName("ResetIM", object: nil, userInfo: userInfo)
+//            }
+//        }
+//
+//        controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed {
+//                print("buttonY")
+//                let userInfo = [
+//                    "action":"resetBoth"]
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "ResetBoth"), object: nil, userInfo: userInfo)
+////                let counters = "both"
+////                let userInfo = [
+////                    "action":"\(counters)"]
+////                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
+////                self.countersControl.selectedSegmentIndex = 1
+//            }
+//        }
+//
+//        
+//        controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed {
+//                var counters = ""
+//                print("buttonX \(self.countersControl.selectedSegmentIndex)")
+//                var index = self.countersControl.selectedSegmentIndex
+//                index = index + 1
+//                if index == 3 {
+//                    self.countersControl.selectedSegmentIndex = 0
+//                }
+//                print("buttonX \(self.countersControl.selectedSegmentIndex)")
+//                self.countersControl.selectedSegmentIndex = index
+//                switch self.countersControl.selectedSegmentIndex {
+//                case 0:
+//                    counters = "om"
+////                    self.countersControl.selectedSegmentIndex = 2
+//                case 1:
+//                    counters = "both"
+////                    self.countersControl.selectedSegmentIndex = 1
+//                case 2:
+//                    counters = "im"
+////                    self.countersControl.selectedSegmentIndex = 0
+//                default:
+//                    break;
+//                }
+//
+//                
 //                let userInfo = [
 //                    "action":"\(counters)"]
-//                NSNotificationCenter.defaultCenter().postNotificationName("SelectedCountersChanged", object: nil, userInfo: userInfo)
-//                self.countersControl.selectedSegmentIndex = 1
-            }
-        }
-
-        
-        controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
-                var counters = ""
-                print("buttonX \(self.countersControl.selectedSegmentIndex)")
-                var index = self.countersControl.selectedSegmentIndex
-                index = index + 1
-                if index == 3 {
-                    self.countersControl.selectedSegmentIndex = 0
-                }
-                print("buttonX \(self.countersControl.selectedSegmentIndex)")
-                self.countersControl.selectedSegmentIndex = index
-                switch self.countersControl.selectedSegmentIndex {
-                case 0:
-                    counters = "om"
-//                    self.countersControl.selectedSegmentIndex = 2
-                case 1:
-                    counters = "both"
-//                    self.countersControl.selectedSegmentIndex = 1
-                case 2:
-                    counters = "im"
-//                    self.countersControl.selectedSegmentIndex = 0
-                default:
-                    break;
-                }
-
-                
-                let userInfo = [
-                    "action":"\(counters)"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "SelectedCountersChanged"), object: nil, userInfo: userInfo)
-            }
-        }
-        controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
-            if pressed {
-                print("rightShoulder")
-                self.actions.insert("Split", at: 0)
-                self.items.insert(self.milesLbl.text!, at:0)
-                self.tableView.reloadData()
-            }
-        }
-    }
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "SelectedCountersChanged"), object: nil, userInfo: userInfo)
+//            }
+//        }
+//        controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+//            if pressed {
+//                print("rightShoulder")
+//                self.actions.insert("Split", at: 0)
+//                self.items.insert(self.milesLbl.text!, at:0)
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
     
     // Table
 
@@ -469,6 +469,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //        print(sender.value)
 //        print(oldStepper)
 //        print(sender.value < oldStepper)
+        
         if sender.value < oldStepper{
             let userInfo = [
                 "action":"minusOne"]
@@ -733,9 +734,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         default:
             break;
         }
-        if (delegate?.xgps160!.isConnected)! == false {
-            horrizontalAccuracy.text = String(describing: userInfo!["horizontalAccuracy"]!)
-        }
+//        if (delegate?.xgps160!.isConnected)! == false {
+//            horrizontalAccuracy.text = String(describing: userInfo!["horizontalAccuracy"]!)
+//        }
 
     }
     
