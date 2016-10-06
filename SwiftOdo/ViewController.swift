@@ -490,6 +490,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         //print("reset Btn pushed")
         let userInfo = [
             "action":"reset"]
+        let zom = self.milesLbl.text!
+        items.insert("\(zom)", at:0)
+        actions.insert("Zero OM", at:0)
+        self.tableView.reloadData()
         NotificationCenter.default.post(name: Notification.Name(rawValue: "Reset"), object: nil, userInfo: userInfo)
     }
     
@@ -497,7 +501,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         //print("zeroIM Btn pushed")
         let userInfo = [
             "action":"resetIM"]
-        let zim = String(format: "%.2f", self.splitOM)
+//        let zim = String(format: "%.2f", self.splitOM)
+        let zim = self.imLbl.text!
         items.insert("\(zim)", at:0)
         actions.insert("Zero IM", at:0)
         self.tableView.reloadData()
